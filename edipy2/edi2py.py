@@ -116,11 +116,20 @@ system = sys.platform
 libext = ".so"
 if system == "darwin":
     libext = ".dylib"
-libpath = pkgconfig.variables("edipack2")['libdir']
-sys.path.insert(0, libpath)
-libfile = os.path.join(libpath, "libedi2py" + libext)
+#add libpath
 try:
-    libedi2py = CDLL(libfile)
+    try: #try the ineq
+        libpath = pkgconfig.variables("edipack2ineq")['libdir']
+        sys.path.insert(0, libpath)
+        libfile = os.path.join(libpath, "libedineq2py.so" + libext)
+        libedi2py = CDLL(libfile)
+        print("Loaded DMFT + r-DMFT extension")
+    except: #no ineq present
+        libpath = pkgconfig.variables("edipack2")['libdir']
+        sys.path.insert(0, libpath)
+        libfile = os.path.join(libpath, "libedi2py" + libext)
+        libedi2py = CDLL(libfile)
+        print("Loaded DMFT")
 except:
     print("Couldn't load the libedi2py library. Import will fail.")
     libedi2py = None
