@@ -121,7 +121,7 @@ try:
     try: #try the ineq
         libpath = pkgconfig.variables("edipack2ineq")['libdir']
         sys.path.insert(0, libpath)
-        libfile = os.path.join(libpath, "libedineq2py.so" + libext)
+        libfile = os.path.join(libpath, "libedineq2py" + libext)
         libedi2py = CDLL(libfile)
         print("Loaded DMFT + r-DMFT extension")
     except: #no ineq present
