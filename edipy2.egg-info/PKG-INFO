@@ -1,0 +1,23 @@
+Metadata-Version: 2.2
+Name: edipy2
+Version: 2.0.9
+Summary: EDIpack2.0 Python API
+Author-email: Lorenzo Crippa <crippa.lorenzo@gmail.com>, Adriano Amaricci <amaricci@sissa.it>
+Project-URL: Source, https://github.com/edipack/edipy2.git
+Keywords: edipack,edipy
+Classifier: Development Status :: 3 - Alpha
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Intended Audience :: Science/Research
+Classifier: Topic :: Scientific/Engineering :: Physics
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+Requires-Dist: pkgconfig
+Requires-Dist: numpy
+Requires-Dist: mpi4py
+
+# edipy2
