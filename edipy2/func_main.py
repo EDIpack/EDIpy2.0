@@ -58,14 +58,18 @@ def init_solver(self, bath=None, Nb=None, Nlat=None):
                 Nb = self.library.get_bath_dimension()
                 bath = np.zeros((Nlat, Nb), dtype="float", order="F")
             else:
-                raise RuntimeError("Can't use r-DMFT routines without installing edipack2ineq")
+                raise RuntimeError(
+                    "Can't use r-DMFT routines without installing edipack2ineq"
+                )
         elif Nb is not None and Nlat is None:
             bath = np.zeros(Nb, dtype="float", order="F")
         elif Nb is not None and Nlat is not None:
             if self.has_ineq:
                 bath = np.zeros((Nlat, Nb), dtype="float", order="F")
             else:
-                raise RuntimeError("Can't use r-DMFT routines without installing edipack2ineq")
+                raise RuntimeError(
+                    "Can't use r-DMFT routines without installing edipack2ineq"
+                )
     else:
         if Nb is not None or Nlat is not None:
             print(
@@ -78,12 +82,14 @@ def init_solver(self, bath=None, Nb=None, Nlat=None):
         np.ctypeslib.ndpointer(dtype=np.int64, ndim=1, flags="F_CONTIGUOUS"),
     ]
     init_solver_site.restype = None
-    
+
     if self.has_ineq:
         init_solver_ineq = self.library.init_solver_ineq
         init_solver_ineq.argtypes = [
             np.ctypeslib.ndpointer(dtype=float, ndim=2, flags="F_CONTIGUOUS"),
-            np.ctypeslib.ndpointer(dtype=np.int64, ndim=1, flags="F_CONTIGUOUS"),
+            np.ctypeslib.ndpointer(
+                dtype=np.int64, ndim=1, flags="F_CONTIGUOUS"
+            ),
         ]
         init_solver_ineq.restype = None
 
@@ -97,9 +103,11 @@ def init_solver(self, bath=None, Nb=None, Nlat=None):
             init_solver_ineq(bath, dim_bath)
             self.Nineq = np.shape(bath)[
                 0
-            ]  # save number of inequivalent sites: this is useful when we want to know if we are in lattice case or not
+            ]  # save number of inequivalent sites
         else:
-            raise RuntimeError("Can't use r-DMFT routines without installing edipack2ineq")
+            raise RuntimeError(
+                "Can't use r-DMFT routines without installing edipack2ineq"
+            )
 
     return bath
 
@@ -133,7 +141,9 @@ def solve(self, bath, flag_gf=True, flag_mpi=True, mpi_lanc=False):
     """
     solve_site = self.library.solve_site
     solve_site.argtypes = [
-        np.ctypeslib.ndpointer(dtype=float, ndim=1, flags="F_CONTIGUOUS"),  # bath
+        np.ctypeslib.ndpointer(
+            dtype=float, ndim=1, flags="F_CONTIGUOUS"
+        ),  # bath
         np.ctypeslib.ndpointer(
             dtype=np.int64, ndim=1, flags="F_CONTIGUOUS"
         ),  # dim_bath
@@ -145,7 +155,9 @@ def solve(self, bath, flag_gf=True, flag_mpi=True, mpi_lanc=False):
         # Define the function signature for the Fortran function `solve_ineq`.
         solve_ineq = self.library.solve_ineq
         solve_ineq.argtypes = [
-            np.ctypeslib.ndpointer(dtype=float, ndim=2, flags="F_CONTIGUOUS"),  # bath
+            np.ctypeslib.ndpointer(
+                dtype=float, ndim=2, flags="F_CONTIGUOUS"
+            ),  # bath
             np.ctypeslib.ndpointer(
                 dtype=np.int64, ndim=1, flags="F_CONTIGUOUS"
             ),  # dim_bath
@@ -162,7 +174,9 @@ def solve(self, bath, flag_gf=True, flag_mpi=True, mpi_lanc=False):
         if self.has_ineq:
             solve_ineq(bath, dim_bath, flag_gf, mpi_lanc)
         else:
-            raise RuntimeError("Can't use r-DMFT routines without installing edipack2ineq")
+            raise RuntimeError(
+                "Can't use r-DMFT routines without installing edipack2ineq"
+            )
 
 
 # finalize solver
