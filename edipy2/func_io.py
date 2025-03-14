@@ -34,13 +34,13 @@ def get_dens(self, ilat=None, iorb=None):
         np.ctypeslib.ndpointer(dtype=float, ndim=1, flags="F_CONTIGUOUS")
     ]
     ed_get_dens_n1_wrap.restype = None
-
-    ed_get_dens_n2_wrap = self.library.ed_get_dens_n2
-    ed_get_dens_n2_wrap.argtypes = [
-        np.ctypeslib.ndpointer(dtype=float, ndim=2, flags="F_CONTIGUOUS"),
-        c_int,
-    ]
-    ed_get_dens_n2_wrap.restype = None
+    if self.has_ineq:
+        ed_get_dens_n2_wrap = self.library.ed_get_dens_n2
+        ed_get_dens_n2_wrap.argtypes = [
+            np.ctypeslib.ndpointer(dtype=float, ndim=2, flags="F_CONTIGUOUS"),
+            c_int,
+        ]
+        ed_get_dens_n2_wrap.restype = None
 
     if self.Nineq == 0:
         densvec = np.zeros(aux_norb, dtype=float, order="F")
@@ -53,18 +53,21 @@ def get_dens(self, ilat=None, iorb=None):
         else:
             return densvec
     else:
-        densvec = np.zeros([self.Nineq, aux_norb], dtype=float, order="F")
-        ed_get_dens_n2_wrap(densvec, self.Nineq)
-        densvec = np.asarray(densvec)
+        if self.has_ineq:
+            densvec = np.zeros([self.Nineq, aux_norb], dtype=float, order="F")
+            ed_get_dens_n2_wrap(densvec, self.Nineq)
+            densvec = np.asarray(densvec)
 
-        if ilat is not None and iorb is not None:
-            return densvec[ilat, iorb]
-        elif ilat is None and iorb is not None:
-            return densvec[:, iorb]
-        elif ilat is not None and iorb is None:
-            return densvec[ilat, :]
+            if ilat is not None and iorb is not None:
+                return densvec[ilat, iorb]
+            elif ilat is None and iorb is not None:
+                return densvec[:, iorb]
+            elif ilat is not None and iorb is None:
+                return densvec[ilat, :]
+            else:
+                return densvec
         else:
-            return densvec
+            raise RuntimeError("Can't use r-DMFT routines without installing edipack2ineq")
 
 
 # magnetization
@@ -107,13 +110,13 @@ def get_mag(self, icomp=None, ilat=None, iorb=None):
         np.ctypeslib.ndpointer(dtype=float, ndim=2, flags="F_CONTIGUOUS")
     ]
     ed_get_mag_n2_wrap.restype = None
-
-    ed_get_mag_n3_wrap = self.library.ed_get_mag_n3
-    ed_get_mag_n3_wrap.argtypes = [
-        np.ctypeslib.ndpointer(dtype=float, ndim=3, flags="F_CONTIGUOUS"),
-        c_int,
-    ]
-    ed_get_mag_n3_wrap.restype = None
+    if self.has_ineq:
+        ed_get_mag_n3_wrap = self.library.ed_get_mag_n3
+        ed_get_mag_n3_wrap.argtypes = [
+            np.ctypeslib.ndpointer(dtype=float, ndim=3, flags="F_CONTIGUOUS"),
+            c_int,
+        ]
+        ed_get_mag_n3_wrap.restype = None
 
     if self.Nineq == 0:
         magvec = np.zeros([3, aux_norb], dtype=float, order="F")
@@ -130,28 +133,31 @@ def get_mag(self, icomp=None, ilat=None, iorb=None):
         elif iorb is None and icomp is None:
             return magvec
     else:
-        magvec = np.zeros([self.Nineq, 3, aux_norb], dtype=float, order="F")
-        ed_get_mag_n3_wrap(magvec, self.Nineq)
-        magvec = np.asarray(magvec)
+        if self.has_ineq:
+            magvec = np.zeros([self.Nineq, 3, aux_norb], dtype=float, order="F")
+            ed_get_mag_n3_wrap(magvec, self.Nineq)
+            magvec = np.asarray(magvec)
 
-        if ilat is not None:
-            if iorb is not None and icomp is not None:
-                return magvec[ilat, icomp, iorb]
-            if iorb is None and icomp is not None:
-                return magvec[ilat, icomp, :]
-            if iorb is not None and icomp is None:
-                return magvec[ilat, :, iorb]
-            if iorb is None and icomp is None:
-                return magvec[ilat, :, :]
+            if ilat is not None:
+                if iorb is not None and icomp is not None:
+                    return magvec[ilat, icomp, iorb]
+                if iorb is None and icomp is not None:
+                    return magvec[ilat, icomp, :]
+                if iorb is not None and icomp is None:
+                    return magvec[ilat, :, iorb]
+                if iorb is None and icomp is None:
+                    return magvec[ilat, :, :]
+            else:
+                if iorb is not None and icomp is not None:
+                    return magvec[:, icomp, iorb]
+                if iorb is None and icomp is not None:
+                    return magvec[:, icomp, :]
+                if iorb is not None and icomp is None:
+                    return magvec[:, :, iorb]
+                if iorb is None and icomp is None:
+                    return magvec
         else:
-            if iorb is not None and icomp is not None:
-                return magvec[:, icomp, iorb]
-            if iorb is None and icomp is not None:
-                return magvec[:, icomp, :]
-            if iorb is not None and icomp is None:
-                return magvec[:, :, iorb]
-            if iorb is None and icomp is None:
-                return magvec
+            raise RuntimeError("Can't use r-DMFT routines without installing edipack2ineq")
 
 
 # double occupation
@@ -181,13 +187,13 @@ def get_docc(self, ilat=None, iorb=None):
         np.ctypeslib.ndpointer(dtype=float, ndim=1, flags="F_CONTIGUOUS")
     ]
     ed_get_docc_n1_wrap.restype = None
-
-    ed_get_docc_n2_wrap = self.library.ed_get_docc_n2
-    ed_get_docc_n2_wrap.argtypes = [
-        np.ctypeslib.ndpointer(dtype=float, ndim=2, flags="F_CONTIGUOUS"),
-        c_int,
-    ]
-    ed_get_docc_n2_wrap.restype = None
+    if self.has_ineq:
+        ed_get_docc_n2_wrap = self.library.ed_get_docc_n2
+        ed_get_docc_n2_wrap.argtypes = [
+            np.ctypeslib.ndpointer(dtype=float, ndim=2, flags="F_CONTIGUOUS"),
+            c_int,
+        ]
+        ed_get_docc_n2_wrap.restype = None
 
     if self.Nineq == 0:
         doccvec = np.zeros(aux_norb, dtype=float, order="F")
@@ -200,18 +206,21 @@ def get_docc(self, ilat=None, iorb=None):
         else:
             return doccvec
     else:
-        doccvec = np.zeros([self.Nineq, aux_norb], dtype=float, order="F")
-        ed_get_docc_n2_wrap(doccvec, self.Nineq)
-        doccvec = np.asarray(doccvec)
+        if self.has_ineq:
+            doccvec = np.zeros([self.Nineq, aux_norb], dtype=float, order="F")
+            ed_get_docc_n2_wrap(doccvec, self.Nineq)
+            doccvec = np.asarray(doccvec)
 
-        if ilat is not None and iorb is not None:
-            return doccvec[ilat, iorb]
-        elif ilat is None and iorb is not None:
-            return doccvec[:, iorb]
-        elif ilat is not None and iorb is None:
-            return doccvec[ilat, :]
+            if ilat is not None and iorb is not None:
+                return doccvec[ilat, iorb]
+            elif ilat is None and iorb is not None:
+                return doccvec[:, iorb]
+            elif ilat is not None and iorb is None:
+                return doccvec[ilat, :]
+            else:
+                return doccvec
         else:
-            return doccvec
+            raise RuntimeError("Can't use r-DMFT routines without installing edipack2ineq")
 
 
 # superconductive phi
@@ -244,13 +253,13 @@ def get_phi(self, ilat=None, iorb=None, jorb=None):
         np.ctypeslib.ndpointer(dtype=float, ndim=2, flags="F_CONTIGUOUS")  # self
     ]
     ed_get_phisc_n2_wrap.restype = None
-
-    ed_get_phisc_n3_wrap = self.library.ed_get_phisc_n3
-    ed_get_phisc_n3_wrap.argtypes = [
-        np.ctypeslib.ndpointer(dtype=float, ndim=3, flags="F_CONTIGUOUS"),  # self
-        c_int,  # Nlat
-    ]
-    ed_get_phisc_n3_wrap.restype = None
+    if self.has_ineq:
+        ed_get_phisc_n3_wrap = self.library.ed_get_phisc_n3
+        ed_get_phisc_n3_wrap.argtypes = [
+            np.ctypeslib.ndpointer(dtype=float, ndim=3, flags="F_CONTIGUOUS"),  # self
+            c_int,  # Nlat
+        ]
+        ed_get_phisc_n3_wrap.restype = None
 
     if self.Nineq == 0:
         phivec = np.zeros((aux_norb, aux_norb), dtype=float, order="F")
@@ -268,28 +277,31 @@ def get_phi(self, ilat=None, iorb=None, jorb=None):
         else:
             return phivec
     else:
-        phivec = np.zeros([self.Nineq, aux_norb, aux_norb], dtype=float, order="F")
-        ed_get_docc_n3_wrap(phivec, self.Nineq)
-        phivec = np.asarray(phivec)
+        if self.has_ineq:
+            phivec = np.zeros([self.Nineq, aux_norb, aux_norb], dtype=float, order="F")
+            ed_get_docc_n3_wrap(phivec, self.Nineq)
+            phivec = np.asarray(phivec)
 
-        if ilat is not None:
-            if iorb is not None and jorb is not None:
-                return phivec[ilat, iorb, jorb]
-            if iorb is not None and jorb is None:
-                return phivec[ilat, iorb, :]
-            if jorb is not None and iorb is None:
-                return phivec[ilat, :, jorb]
+            if ilat is not None:
+                if iorb is not None and jorb is not None:
+                    return phivec[ilat, iorb, jorb]
+                if iorb is not None and jorb is None:
+                    return phivec[ilat, iorb, :]
+                if jorb is not None and iorb is None:
+                    return phivec[ilat, :, jorb]
+                else:
+                    return phivec[ilat, :, :]
             else:
-                return phivec[ilat, :, :]
+                if iorb is not None and jorb is not None:
+                    return phivec[:, iorb, jorb]
+                if iorb is not None and jorb is None:
+                    return phivec[:, iorb, :]
+                if jorb is not None and iorb is None:
+                    return phivec[:, :, jorb]
+                else:
+                    return phivec
         else:
-            if iorb is not None and jorb is not None:
-                return phivec[:, iorb, jorb]
-            if iorb is not None and jorb is None:
-                return phivec[:, iorb, :]
-            if jorb is not None and iorb is None:
-                return phivec[:, :, jorb]
-            else:
-                return phivec
+            raise RuntimeError("Can't use r-DMFT routines without installing edipack2ineq")
 
 
 # energy
@@ -319,13 +331,13 @@ def get_eimp(self, ilat=None, ikind=None):
         np.ctypeslib.ndpointer(dtype=float, ndim=1, flags="F_CONTIGUOUS")
     ]
     ed_get_eimp_n1_wrap.restype = None
-
-    ed_get_eimp_n2_wrap = self.library.ed_get_eimp_n2
-    ed_get_eimp_n2_wrap.argtypes = [
-        np.ctypeslib.ndpointer(dtype=float, ndim=2, flags="F_CONTIGUOUS"),
-        c_int,
-    ]
-    ed_get_eimp_n2_wrap.restype = None
+    if self.has_ineq:
+        ed_get_eimp_n2_wrap = self.library.ed_get_eimp_n2
+        ed_get_eimp_n2_wrap.argtypes = [
+            np.ctypeslib.ndpointer(dtype=float, ndim=2, flags="F_CONTIGUOUS"),
+            c_int,
+        ]
+        ed_get_eimp_n2_wrap.restype = None
 
     if self.Nineq == 0:
         eimp_vec = np.zeros(4, dtype=float, order="F")
@@ -338,18 +350,21 @@ def get_eimp(self, ilat=None, ikind=None):
         else:
             return eimp_vec
     else:
-        eimp_vec = np.zeros([self.Nineq, 4], dtype=float, order="F")
-        ed_get_eimp_n2_wrap(eimp_vec, self.Nineq)
-        eimp_vec = np.asarray(eimp_vec)
+        if self.has_ineq:
+            eimp_vec = np.zeros([self.Nineq, 4], dtype=float, order="F")
+            ed_get_eimp_n2_wrap(eimp_vec, self.Nineq)
+            eimp_vec = np.asarray(eimp_vec)
 
-        if ilat is not None and ikind is not None:
-            return eimp_vec[ilat, ikind]
-        elif ilat is None and ikind is not None:
-            return eimp_vec[:, ikind]
-        elif ilat is not None and ikind is None:
-            return eimp_vec[ilat, :]
+            if ilat is not None and ikind is not None:
+                return eimp_vec[ilat, ikind]
+            elif ilat is None and ikind is not None:
+                return eimp_vec[:, ikind]
+            elif ilat is not None and ikind is None:
+                return eimp_vec[ilat, :]
+            else:
+                return eimp_vec
         else:
-            return eimp_vec
+            raise RuntimeError("Can't use r-DMFT routines without installing edipack2ineq")
 
 
 ########################
@@ -445,42 +460,43 @@ def get_sigma(self, ilat=None, ishape=None, axis="m", typ="n", zeta=None):
         c_int,  # zflag
     ]
     ed_get_sigma_site_n5.restype = None
+    
+    if self.has_ineq:
+        ed_get_sigma_lattice_n3 = self.library.get_sigma_lattice_n3
+        ed_get_sigma_lattice_n3.argtypes = [
+            np.ctypeslib.ndpointer(dtype=complex, ndim=3, flags="F_CONTIGUOUS"),  # self
+            c_int,  # nineq
+            c_int,  # axis
+            c_int,  # typ
+            np.ctypeslib.ndpointer(dtype=complex, ndim=1, flags="F_CONTIGUOUS"),  # zeta
+            c_int,  # dz
+            c_int,  # zflag
+        ]
+        ed_get_sigma_lattice_n3.restype = None
 
-    ed_get_sigma_lattice_n3 = self.library.get_sigma_lattice_n3
-    ed_get_sigma_lattice_n3.argtypes = [
-        np.ctypeslib.ndpointer(dtype=complex, ndim=3, flags="F_CONTIGUOUS"),  # self
-        c_int,  # nineq
-        c_int,  # axis
-        c_int,  # typ
-        np.ctypeslib.ndpointer(dtype=complex, ndim=1, flags="F_CONTIGUOUS"),  # zeta
-        c_int,  # dz
-        c_int,  # zflag
-    ]
-    ed_get_sigma_lattice_n3.restype = None
+        ed_get_sigma_lattice_n4 = self.library.get_sigma_lattice_n4
+        ed_get_sigma_lattice_n4.argtypes = [
+            np.ctypeslib.ndpointer(dtype=complex, ndim=4, flags="F_CONTIGUOUS"),  # self
+            c_int,  # nineq
+            c_int,  # axis
+            c_int,  # typ
+            np.ctypeslib.ndpointer(dtype=complex, ndim=1, flags="F_CONTIGUOUS"),  # zeta
+            c_int,  # dz
+            c_int,  # zflag
+        ]
+        ed_get_sigma_lattice_n4.restype = None
 
-    ed_get_sigma_lattice_n4 = self.library.get_sigma_lattice_n4
-    ed_get_sigma_lattice_n4.argtypes = [
-        np.ctypeslib.ndpointer(dtype=complex, ndim=4, flags="F_CONTIGUOUS"),  # self
-        c_int,  # nineq
-        c_int,  # axis
-        c_int,  # typ
-        np.ctypeslib.ndpointer(dtype=complex, ndim=1, flags="F_CONTIGUOUS"),  # zeta
-        c_int,  # dz
-        c_int,  # zflag
-    ]
-    ed_get_sigma_lattice_n4.restype = None
-
-    ed_get_sigma_lattice_n6 = self.library.get_sigma_lattice_n6
-    ed_get_sigma_lattice_n6.argtypes = [
-        np.ctypeslib.ndpointer(dtype=complex, ndim=4, flags="F_CONTIGUOUS"),  # self
-        c_int,  # nineq
-        c_int,  # axis
-        c_int,  # typ
-        np.ctypeslib.ndpointer(dtype=complex, ndim=1, flags="F_CONTIGUOUS"),  # zeta
-        c_int,  # dz
-        c_int,  # zflag
-    ]
-    ed_get_sigma_lattice_n6.restype = None
+        ed_get_sigma_lattice_n6 = self.library.get_sigma_lattice_n6
+        ed_get_sigma_lattice_n6.argtypes = [
+            np.ctypeslib.ndpointer(dtype=complex, ndim=4, flags="F_CONTIGUOUS"),  # self
+            c_int,  # nineq
+            c_int,  # axis
+            c_int,  # typ
+            np.ctypeslib.ndpointer(dtype=complex, ndim=1, flags="F_CONTIGUOUS"),  # zeta
+            c_int,  # dz
+            c_int,  # zflag
+        ]
+        ed_get_sigma_lattice_n6.restype = None
 
     # Global vars
     norb_aux = c_int.in_dll(self.library, "Norb").value
@@ -544,37 +560,40 @@ def get_sigma(self, ilat=None, ishape=None, axis="m", typ="n", zeta=None):
             raise ValueError("Shape(array) != 3,5 in get_sigma_site")
         return Sigma
     else:
-        if ishape == 3:
-            Sigma = np.zeros(
-                [
-                    self.Nineq * nspin_aux * norb_aux,
-                    self.Nineq * nspin_aux * norb_aux,
-                    nfreq,
-                ],
-                dtype=complex,
-                order="F",
-            )
-            ed_get_sigma_site_n3(Sigma, self.Nineq, axisint, typint, zeta, nfreq, zflag)
-        elif ishape == 4:
-            Sigma = np.zeros(
-                [self.Nineq, nspin_aux * norb_aux, nspin_aux * norb_aux, nfreq],
-                dtype=complex,
-                order="F",
-            )
-            ed_get_sigma_site_n4(Sigma, self.Nineq, axisint, typint, zeta, nfreq, zflag)
-        elif ishape == 6:
-            Sigma = np.zeros(
-                [self.Nineq, nspin_aux, nspin_aux, norb_aux, norb_aux, nfreq],
-                dtype=complex,
-                order="F",
-            )
-            ed_get_sigma_site_n6(Sigma, self.Nineq, axisint, typint, zeta, nfreq, zflag)
+        if self.has_ineq:
+            if ishape == 3:
+                Sigma = np.zeros(
+                    [
+                        self.Nineq * nspin_aux * norb_aux,
+                        self.Nineq * nspin_aux * norb_aux,
+                        nfreq,
+                    ],
+                    dtype=complex,
+                    order="F",
+                )
+                ed_get_sigma_site_n3(Sigma, self.Nineq, axisint, typint, zeta, nfreq, zflag)
+            elif ishape == 4:
+                Sigma = np.zeros(
+                    [self.Nineq, nspin_aux * norb_aux, nspin_aux * norb_aux, nfreq],
+                    dtype=complex,
+                    order="F",
+                )
+                ed_get_sigma_site_n4(Sigma, self.Nineq, axisint, typint, zeta, nfreq, zflag)
+            elif ishape == 6:
+                Sigma = np.zeros(
+                    [self.Nineq, nspin_aux, nspin_aux, norb_aux, norb_aux, nfreq],
+                    dtype=complex,
+                    order="F",
+                )
+                ed_get_sigma_site_n6(Sigma, self.Nineq, axisint, typint, zeta, nfreq, zflag)
+            else:
+                raise ValueError("Shape(array) != 3,4,6 in get_sigma_lattice")
+            if ilat is not None and ishape != 3:
+                return Sigma[ilat]
+            else:
+                return Sigma
         else:
-            raise ValueError("Shape(array) != 3,4,6 in get_sigma_lattice")
-        if ilat is not None and ishape != 3:
-            return Sigma[ilat]
-        else:
-            return Sigma
+            raise RuntimeError("Can't use r-DMFT routines without installing edipack2ineq")
 
 
 #######################
@@ -671,41 +690,42 @@ def get_gimp(self, ilat=None, ishape=None, axis="m", typ="n", zeta=None):
     ]
     ed_get_gimp_site_n5.restype = None
 
-    ed_get_gimp_lattice_n3 = self.library.get_gimp_lattice_n3
-    ed_get_gimp_lattice_n3.argtypes = [
-        np.ctypeslib.ndpointer(dtype=complex, ndim=3, flags="F_CONTIGUOUS"),  # self
-        c_int,  # nineq
-        c_int,  # axis
-        c_int,  # typ
-        np.ctypeslib.ndpointer(dtype=complex, ndim=1, flags="F_CONTIGUOUS"),  # zeta
-        c_int,  # dz
-        c_int,  # zflag
-    ]
-    ed_get_gimp_lattice_n3.restype = None
+    if self.has_ineq:
+        ed_get_gimp_lattice_n3 = self.library.get_gimp_lattice_n3
+        ed_get_gimp_lattice_n3.argtypes = [
+            np.ctypeslib.ndpointer(dtype=complex, ndim=3, flags="F_CONTIGUOUS"),  # self
+            c_int,  # nineq
+            c_int,  # axis
+            c_int,  # typ
+            np.ctypeslib.ndpointer(dtype=complex, ndim=1, flags="F_CONTIGUOUS"),  # zeta
+            c_int,  # dz
+            c_int,  # zflag
+        ]
+        ed_get_gimp_lattice_n3.restype = None
 
-    ed_get_gimp_lattice_n4 = self.library.get_gimp_lattice_n4
-    ed_get_gimp_lattice_n4.argtypes = [
-        np.ctypeslib.ndpointer(dtype=complex, ndim=4, flags="F_CONTIGUOUS"),  # self
-        c_int,  # nineq
-        c_int,  # axis
-        c_int,  # typ
-        np.ctypeslib.ndpointer(dtype=complex, ndim=1, flags="F_CONTIGUOUS"),  # zeta
-        c_int,  # dz
-        c_int,  # zflag
-    ]
-    ed_get_gimp_lattice_n4.restype = None
+        ed_get_gimp_lattice_n4 = self.library.get_gimp_lattice_n4
+        ed_get_gimp_lattice_n4.argtypes = [
+            np.ctypeslib.ndpointer(dtype=complex, ndim=4, flags="F_CONTIGUOUS"),  # self
+            c_int,  # nineq
+            c_int,  # axis
+            c_int,  # typ
+            np.ctypeslib.ndpointer(dtype=complex, ndim=1, flags="F_CONTIGUOUS"),  # zeta
+            c_int,  # dz
+            c_int,  # zflag
+        ]
+        ed_get_gimp_lattice_n4.restype = None
 
-    ed_get_gimp_lattice_n6 = self.library.get_gimp_lattice_n6
-    ed_get_gimp_lattice_n6.argtypes = [
-        np.ctypeslib.ndpointer(dtype=complex, ndim=4, flags="F_CONTIGUOUS"),  # self
-        c_int,  # nineq
-        c_int,  # axis
-        c_int,  # typ
-        np.ctypeslib.ndpointer(dtype=complex, ndim=1, flags="F_CONTIGUOUS"),  # zeta
-        c_int,  # dz
-        c_int,  # zflag
-    ]
-    ed_get_gimp_lattice_n6.restype = None
+        ed_get_gimp_lattice_n6 = self.library.get_gimp_lattice_n6
+        ed_get_gimp_lattice_n6.argtypes = [
+            np.ctypeslib.ndpointer(dtype=complex, ndim=4, flags="F_CONTIGUOUS"),  # self
+            c_int,  # nineq
+            c_int,  # axis
+            c_int,  # typ
+            np.ctypeslib.ndpointer(dtype=complex, ndim=1, flags="F_CONTIGUOUS"),  # zeta
+            c_int,  # dz
+            c_int,  # zflag
+        ]
+        ed_get_gimp_lattice_n6.restype = None
 
     # Global vars
     norb_aux = c_int.in_dll(self.library, "Norb").value
@@ -771,37 +791,40 @@ def get_gimp(self, ilat=None, ishape=None, axis="m", typ="n", zeta=None):
             raise ValueError("Shape(array) != 3,5 in get_gimp_site")
         return gimp
     else:
-        if ishape == 3:
-            gimp = np.zeros(
-                [
-                    self.Nineq * nspin_aux * norb_aux,
-                    self.Nineq * nspin_aux * norb_aux,
-                    nfreq,
-                ],
-                dtype=complex,
-                order="F",
-            )
-            ed_get_gimp_site_n3(gimp, self.Nineq, axisint, typint, zeta, nfreq, zflag)
-        elif ishape == 4:
-            gimp = np.zeros(
-                [self.Nineq, nspin_aux * norb_aux, nspin_aux * norb_aux, nfreq],
-                dtype=complex,
-                order="F",
-            )
-            ed_get_gimp_site_n4(gimp, self.Nineq, axisint, typint, zeta, nfreq, zflag)
-        elif ishape == 6:
-            gimp = np.zeros(
-                [self.Nineq, nspin_aux, nspin_aux, norb_aux, norb_aux, nfreq],
-                dtype=complex,
-                order="F",
-            )
-            ed_get_gimp_site_n6(gimp, self.Nineq, axisint, typint, zeta, nfreq, zflag)
+        if self.has_ineq:
+            if ishape == 3:
+                gimp = np.zeros(
+                    [
+                        self.Nineq * nspin_aux * norb_aux,
+                        self.Nineq * nspin_aux * norb_aux,
+                        nfreq,
+                    ],
+                    dtype=complex,
+                    order="F",
+                )
+                ed_get_gimp_site_n3(gimp, self.Nineq, axisint, typint, zeta, nfreq, zflag)
+            elif ishape == 4:
+                gimp = np.zeros(
+                    [self.Nineq, nspin_aux * norb_aux, nspin_aux * norb_aux, nfreq],
+                    dtype=complex,
+                    order="F",
+                )
+                ed_get_gimp_site_n4(gimp, self.Nineq, axisint, typint, zeta, nfreq, zflag)
+            elif ishape == 6:
+                gimp = np.zeros(
+                    [self.Nineq, nspin_aux, nspin_aux, norb_aux, norb_aux, nfreq],
+                    dtype=complex,
+                    order="F",
+                )
+                ed_get_gimp_site_n6(gimp, self.Nineq, axisint, typint, zeta, nfreq, zflag)
+            else:
+                raise ValueError("Shape(array) != 3,4,6 in get_gimp_lattice")
+            if ilat is not None and ishape != 3:
+                return gimp[ilat]
+            else:
+                return gimp
         else:
-            raise ValueError("Shape(array) != 3,4,6 in get_gimp_lattice")
-        if ilat is not None and ishape != 3:
-            return gimp[ilat]
-        else:
-            return gimp
+            raise RuntimeError("Can't use r-DMFT routines without installing edipack2ineq")
 
 
 # Anderson Impurity Model functions
@@ -1172,8 +1195,12 @@ def get_chi(self, chan="spin", zeta=None, axis=None, ilat=None):
         Nsites = 1
         latticeflag = 0
     else:
-        Nsites = self.Nineq
-        latticeflag = 1
+        if has_ineq:
+            Nsites = self.Nineq
+            latticeflag = 1
+        else:
+            raise RuntimeError("Can't use r-DMFT routines without installing edipack2ineq")
+            
 
     aux_norb = c_int.in_dll(self.library, "Norb").value
     aux_Lmats = c_int.in_dll(self.library, "Lmats").value

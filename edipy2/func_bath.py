@@ -71,28 +71,28 @@ def set_hreplica(self, hvec, lambdavec):
         np.ctypeslib.ndpointer(dtype=np.int64, ndim=1, flags="F_CONTIGUOUS"),
     ]
     init_hreplica_symmetries_d3.restype = None
+    if self.has_ineq:
+        init_hreplica_symmetries_lattice_d5 = (
+            self.library.init_Hreplica_symmetries_lattice_d5
+        )
+        init_hreplica_symmetries_lattice_d5.argtypes = [
+            np.ctypeslib.ndpointer(dtype=complex, ndim=5, flags="F_CONTIGUOUS"),
+            np.ctypeslib.ndpointer(dtype=np.int64, ndim=1, flags="F_CONTIGUOUS"),
+            np.ctypeslib.ndpointer(dtype=float, ndim=3, flags="F_CONTIGUOUS"),
+            np.ctypeslib.ndpointer(dtype=np.int64, ndim=1, flags="F_CONTIGUOUS"),
+        ]
+        init_hreplica_symmetries_lattice_d5.restype = None
 
-    init_hreplica_symmetries_lattice_d5 = (
-        self.library.init_Hreplica_symmetries_lattice_d5
-    )
-    init_hreplica_symmetries_lattice_d5.argtypes = [
-        np.ctypeslib.ndpointer(dtype=complex, ndim=5, flags="F_CONTIGUOUS"),
-        np.ctypeslib.ndpointer(dtype=np.int64, ndim=1, flags="F_CONTIGUOUS"),
-        np.ctypeslib.ndpointer(dtype=float, ndim=3, flags="F_CONTIGUOUS"),
-        np.ctypeslib.ndpointer(dtype=np.int64, ndim=1, flags="F_CONTIGUOUS"),
-    ]
-    init_hreplica_symmetries_lattice_d5.restype = None
-
-    init_hreplica_symmetries_lattice_d3 = (
-        self.library.init_Hreplica_symmetries_lattice_d3
-    )
-    init_hreplica_symmetries_lattice_d3.argtypes = [
-        np.ctypeslib.ndpointer(dtype=complex, ndim=3, flags="F_CONTIGUOUS"),
-        np.ctypeslib.ndpointer(dtype=np.int64, ndim=1, flags="F_CONTIGUOUS"),
-        np.ctypeslib.ndpointer(dtype=float, ndim=3, flags="F_CONTIGUOUS"),
-        np.ctypeslib.ndpointer(dtype=np.int64, ndim=1, flags="F_CONTIGUOUS"),
-    ]
-    init_hreplica_symmetries_lattice_d3.restype = None
+        init_hreplica_symmetries_lattice_d3 = (
+            self.library.init_Hreplica_symmetries_lattice_d3
+        )
+        init_hreplica_symmetries_lattice_d3.argtypes = [
+            np.ctypeslib.ndpointer(dtype=complex, ndim=3, flags="F_CONTIGUOUS"),
+            np.ctypeslib.ndpointer(dtype=np.int64, ndim=1, flags="F_CONTIGUOUS"),
+            np.ctypeslib.ndpointer(dtype=float, ndim=3, flags="F_CONTIGUOUS"),
+            np.ctypeslib.ndpointer(dtype=np.int64, ndim=1, flags="F_CONTIGUOUS"),
+        ]
+        init_hreplica_symmetries_lattice_d3.restype = None
 
     aux_norb = c_int.in_dll(self.library, "Norb").value
     aux_nspin = c_int.in_dll(self.library, "Nspin").value
@@ -105,18 +105,24 @@ def set_hreplica(self, hvec, lambdavec):
         if len(dim_lambdavec) == 2:
             init_hreplica_symmetries_d3(hvec, dim_hvec, lambdavec, dim_lambdavec)
         elif len(Ddim_lambdavec) == 3:
-            init_hreplica_symmetries_lattice_d3(
-                hvec, dim_hvec, lambdavec, dim_lambdavec
-            )
+            if self.has_ineq:
+                init_hreplica_symmetries_lattice_d3(
+                    hvec, dim_hvec, lambdavec, dim_lambdavec
+                )
+            else:
+                raise RuntimeError("Can't use r-DMFT routines without installing edipack2ineq")
         else:
             raise ValueError("Shape(lambdavec) != 2 or 3  in set_Hreplica")
     elif len(dim_hvec) == 5:
         if len(dim_lambdavec) == 2:
             init_hreplica_symmetries_d5(hvec, dim_hvec, lambdavec, dim_lambdavec)
         elif len(dim_lambdavec) == 3:
-            init_hreplica_symmetries_lattice_d5(
-                hvec, dim_hvec, lambdavec, dim_lambdavec
-            )
+            if self.has_ineq:
+                init_hreplica_symmetries_lattice_d5(
+                    hvec, dim_hvec, lambdavec, dim_lambdavec
+                )
+            else:
+                raise RuntimeError("Can't use r-DMFT routines without installing edipack2ineq")
         else:
             raise ValueError("Shape(lambdavec) != 2 or 3  in set_Hreplica")
     else:
@@ -177,28 +183,29 @@ def set_hgeneral(self, hvec, lambdavec):
         np.ctypeslib.ndpointer(dtype=np.int64, ndim=1, flags="F_CONTIGUOUS"),
     ]
     init_hgeneral_symmetries_d3.restype = None
+    
+    if self.has_ineq:
+        init_hgeneral_symmetries_lattice_d5 = (
+            self.library.init_Hgeneral_symmetries_lattice_d5
+        )
+        init_hgeneral_symmetries_lattice_d5.argtypes = [
+            np.ctypeslib.ndpointer(dtype=complex, ndim=5, flags="F_CONTIGUOUS"),
+            np.ctypeslib.ndpointer(dtype=np.int64, ndim=1, flags="F_CONTIGUOUS"),
+            np.ctypeslib.ndpointer(dtype=float, ndim=3, flags="F_CONTIGUOUS"),
+            np.ctypeslib.ndpointer(dtype=np.int64, ndim=1, flags="F_CONTIGUOUS"),
+        ]
+        init_hgeneral_symmetries_lattice_d5.restype = None
 
-    init_hgeneral_symmetries_lattice_d5 = (
-        self.library.init_Hgeneral_symmetries_lattice_d5
-    )
-    init_hgeneral_symmetries_lattice_d5.argtypes = [
-        np.ctypeslib.ndpointer(dtype=complex, ndim=5, flags="F_CONTIGUOUS"),
-        np.ctypeslib.ndpointer(dtype=np.int64, ndim=1, flags="F_CONTIGUOUS"),
-        np.ctypeslib.ndpointer(dtype=float, ndim=3, flags="F_CONTIGUOUS"),
-        np.ctypeslib.ndpointer(dtype=np.int64, ndim=1, flags="F_CONTIGUOUS"),
-    ]
-    init_hgeneral_symmetries_lattice_d5.restype = None
-
-    init_hgeneral_symmetries_lattice_d3 = (
-        self.library.init_Hgeneral_symmetries_lattice_d3
-    )
-    init_hgeneral_symmetries_lattice_d3.argtypes = [
-        np.ctypeslib.ndpointer(dtype=complex, ndim=3, flags="F_CONTIGUOUS"),
-        np.ctypeslib.ndpointer(dtype=np.int64, ndim=1, flags="F_CONTIGUOUS"),
-        np.ctypeslib.ndpointer(dtype=float, ndim=3, flags="F_CONTIGUOUS"),
-        np.ctypeslib.ndpointer(dtype=np.int64, ndim=1, flags="F_CONTIGUOUS"),
-    ]
-    init_hgeneral_symmetries_lattice_d3.restype = None
+        init_hgeneral_symmetries_lattice_d3 = (
+            self.library.init_Hgeneral_symmetries_lattice_d3
+        )
+        init_hgeneral_symmetries_lattice_d3.argtypes = [
+            np.ctypeslib.ndpointer(dtype=complex, ndim=3, flags="F_CONTIGUOUS"),
+            np.ctypeslib.ndpointer(dtype=np.int64, ndim=1, flags="F_CONTIGUOUS"),
+            np.ctypeslib.ndpointer(dtype=float, ndim=3, flags="F_CONTIGUOUS"),
+            np.ctypeslib.ndpointer(dtype=np.int64, ndim=1, flags="F_CONTIGUOUS"),
+        ]
+        init_hgeneral_symmetries_lattice_d3.restype = None
 
     aux_norb = c_int.in_dll(self.library, "Norb").value
     aux_nspin = c_int.in_dll(self.library, "Nspin").value
@@ -211,18 +218,24 @@ def set_hgeneral(self, hvec, lambdavec):
         if len(dim_lambdavec) == 2:
             init_hgeneral_symmetries_d3(hvec, dim_hvec, lambdavec, dim_lambdavec)
         elif len(Ddim_lambdavec) == 3:
-            init_hgeneral_symmetries_lattice_d3(
-                hvec, dim_hvec, lambdavec, dim_lambdavec
-            )
+            if self.has_ineq:
+                init_hgeneral_symmetries_lattice_d3(
+                    hvec, dim_hvec, lambdavec, dim_lambdavec
+                )
+            else:
+                raise RuntimeError("Can't use r-DMFT routines without installing edipack2ineq")
         else:
             raise ValueError("Shape(lambdavec) != 2 or 3  in set_Hgeneral")
     elif len(dim_hvec) == 5:
         if len(dim_lambdavec) == 2:
             init_hgeneral_symmetries_d5(hvec, dim_hvec, lambdavec, dim_lambdavec)
         elif len(dim_lambdavec) == 3:
-            init_hgeneral_symmetries_lattice_d5(
-                hvec, dim_hvec, lambdavec, dim_lambdavec
-            )
+            if self.has_ineq:
+                init_hgeneral_symmetries_lattice_d5(
+                    hvec, dim_hvec, lambdavec, dim_lambdavec
+                )
+            else:
+                raise RuntimeError("Can't use r-DMFT routines without installing edipack2ineq")
         else:
             raise ValueError("Shape(lambdavec) != 2 or 3  in set_Hgeneral")
     else:
@@ -264,16 +277,17 @@ def break_symmetry_bath(self, bath, field, sign, save=True):
         c_int,
     ]
     break_symmetry_bath_site.restype = None
-
-    break_symmetry_bath_ineq = self.library.break_symmetry_bath_ineq
-    break_symmetry_bath_ineq.argtypes = [
-        np.ctypeslib.ndpointer(dtype=float, ndim=1, flags="F_CONTIGUOUS"),
-        np.ctypeslib.ndpointer(dtype=np.int64, ndim=1, flags="F_CONTIGUOUS"),
-        c_double,
-        c_double,
-        c_int,
-    ]
-    break_symmetry_bath_ineq.restype = None
+    
+    if self.has_ineq:
+        break_symmetry_bath_ineq = self.library.break_symmetry_bath_ineq
+        break_symmetry_bath_ineq.argtypes = [
+            np.ctypeslib.ndpointer(dtype=float, ndim=1, flags="F_CONTIGUOUS"),
+            np.ctypeslib.ndpointer(dtype=np.int64, ndim=1, flags="F_CONTIGUOUS"),
+            c_double,
+            c_double,
+            c_int,
+        ]
+        break_symmetry_bath_ineq.restype = None
 
     if save:
         save_int = 1
@@ -283,7 +297,10 @@ def break_symmetry_bath(self, bath, field, sign, save=True):
     if (len(bath_shape)) == 1:
         break_symmetry_bath_site(bath, bath_shape, field, float(sign), save_int)
     else:
-        break_symmetry_bath_ineq(bath, bath_shape, field, float(sign), save_int)
+        if self.has_ineq:
+            break_symmetry_bath_ineq(bath, bath_shape, field, float(sign), save_int)
+        else:
+            raise RuntimeError("Can't use r-DMFT routines without installing edipack2ineq")
     return bath
 
 
@@ -311,14 +328,14 @@ def spin_symmetrize_bath(self, bath, save=True):
         c_int,
     ]
     spin_symmetrize_bath_site.restypes = None
-
-    spin_symmetrize_bath_ineq = self.library.spin_symmetrize_bath_ineq
-    spin_symmetrize_bath_ineq.argtypes = [
-        np.ctypeslib.ndpointer(dtype=float, ndim=1, flags="F_CONTIGUOUS"),
-        np.ctypeslib.ndpointer(dtype=np.int64, ndim=1, flags="F_CONTIGUOUS"),
-        c_int,
-    ]
-    spin_symmetrize_bath_ineq.restypes = None
+    if self.has_ineq:
+        spin_symmetrize_bath_ineq = self.library.spin_symmetrize_bath_ineq
+        spin_symmetrize_bath_ineq.argtypes = [
+            np.ctypeslib.ndpointer(dtype=float, ndim=1, flags="F_CONTIGUOUS"),
+            np.ctypeslib.ndpointer(dtype=np.int64, ndim=1, flags="F_CONTIGUOUS"),
+            c_int,
+        ]
+        spin_symmetrize_bath_ineq.restypes = None
     if save:
         save_int = 1
     else:
@@ -327,7 +344,10 @@ def spin_symmetrize_bath(self, bath, save=True):
     if (len(bath_shape)) == 1:
         spin_symmetrize_bath_site(bath, bath_shape, save_int)
     else:
-        spin_symmetrize_bath_ineq(bath, bath_shape, save_int)
+        if self.has_ineq:
+            spin_symmetrize_bath_ineq(bath, bath_shape, save_int)
+        else:
+            raise RuntimeError("Can't use r-DMFT routines without installing edipack2ineq")
     return bath
 
 
@@ -360,14 +380,14 @@ def orb_symmetrize_bath(self, bath, orb1, orb2, save=True):
         c_int,
     ]
     orb_symmetrize_bath_site.restypes = None
-
-    orb_symmetrize_bath_ineq = self.library.orb_symmetrize_bath_ineq
-    orb_symmetrize_bath_ineq.argtypes = [
-        np.ctypeslib.ndpointer(dtype=float, ndim=1, flags="F_CONTIGUOUS"),
-        np.ctypeslib.ndpointer(dtype=np.int64, ndim=1, flags="F_CONTIGUOUS"),
-        c_int,
-    ]
-    orb_symmetrize_bath_ineq.restypes = None
+    if self.has_ineq:
+        orb_symmetrize_bath_ineq = self.library.orb_symmetrize_bath_ineq
+        orb_symmetrize_bath_ineq.argtypes = [
+            np.ctypeslib.ndpointer(dtype=float, ndim=1, flags="F_CONTIGUOUS"),
+            np.ctypeslib.ndpointer(dtype=np.int64, ndim=1, flags="F_CONTIGUOUS"),
+            c_int,
+        ]
+        orb_symmetrize_bath_ineq.restypes = None
 
     if save:
         save_int = 1
@@ -377,7 +397,10 @@ def orb_symmetrize_bath(self, bath, orb1, orb2, save=True):
     if (len(bath_shape)) == 1:
         orb_symmetrize_bath_site(bath, bath_shape, orb1 + 1, orb2 + 1, save_int)
     else:
-        orb_symmetrize_bath_ineq(bath, bath_shape, orb1 + 1, orb2 + 1, save_int)
+        if self.has_ineq:
+            orb_symmetrize_bath_ineq(bath, bath_shape, orb1 + 1, orb2 + 1, save_int)
+        else:
+            raise RuntimeError("Can't use r-DMFT routines without installing edipack2ineq")
     return bath
 
 
@@ -411,15 +434,16 @@ def orb_equality_bath(self, bath, indx, save=True):
         c_int,
     ]
     orb_equality_bath_site.restypes = None
-
-    orb_equality_bath_ineq = self.library.orb_equality_bath_ineq
-    orb_equality_bath_ineq.argtypes = [
-        np.ctypeslib.ndpointer(dtype=float, ndim=1, flags="F_CONTIGUOUS"),
-        np.ctypeslib.ndpointer(dtype=np.int64, ndim=1, flags="F_CONTIGUOUS"),
-        c_int,
-        c_int,
-    ]
-    orb_equality_bath_ineq.restypes = None
+    if self.has_ineq:
+        orb_equality_bath_ineq = self.library.orb_equality_bath_ineq
+        orb_equality_bath_ineq.argtypes = [
+            np.ctypeslib.ndpointer(dtype=float, ndim=1, flags="F_CONTIGUOUS"),
+            np.ctypeslib.ndpointer(dtype=np.int64, ndim=1, flags="F_CONTIGUOUS"),
+            c_int,
+            c_int,
+        ]
+        orb_equality_bath_ineq.restypes = None
+        
     aux_norb = c_int.in_dll(self.library, "Norb").value
     if save:
         save_int = 1
@@ -433,7 +457,10 @@ def orb_equality_bath(self, bath, indx, save=True):
         if (len(bath_shape)) == 1:
             orb_equality_bath_site(bath, bath_shape, indx, save_int)
         else:
-            orb_equality_bath_ineq(bath, bath_shape, indx, save_int)
+            if self.has_ineq:
+                orb_equality_bath_ineq(bath, bath_shape, indx, save_int)
+            else:
+                raise RuntimeError("Can't use r-DMFT routines without installing edipack2ineq")
     return bath
 
 
@@ -459,13 +486,13 @@ def ph_symmetrize_bath(self, bath, save):
         c_int,
     ]
     ph_symmetrize_bath_site.restypes = None
-
-    ph_symmetrize_bath_ineq = self.library.ph_symmetrize_bath_ineq
-    ph_symmetrize_bath_ineq.argtypes = [
-        np.ctypeslib.ndpointer(dtype=float, ndim=1, flags="F_CONTIGUOUS"),
-        np.ctypeslib.ndpointer(dtype=np.int64, ndim=1, flags="F_CONTIGUOUS"),
-        c_int,
-    ]
+    if self.has_ineq:
+        ph_symmetrize_bath_ineq = self.library.ph_symmetrize_bath_ineq
+        ph_symmetrize_bath_ineq.argtypes = [
+            np.ctypeslib.ndpointer(dtype=float, ndim=1, flags="F_CONTIGUOUS"),
+            np.ctypeslib.ndpointer(dtype=np.int64, ndim=1, flags="F_CONTIGUOUS"),
+            c_int,
+        ]
     ph_symmetrize_bath_ineq.restypes = None
     if save:
         save_int = 1
@@ -475,7 +502,10 @@ def ph_symmetrize_bath(self, bath, save):
     if (len(bath_shape)) == 1:
         ph_symmetrize_bath_site(bath, bath_shape, save_int)
     else:
-        ph_symmetrize_bath_ineq(bath, bath_shape, save_int)
+        if self.has_ineq:
+            ph_symmetrize_bath_ineq(bath, bath_shape, save_int)
+        else:
+            raise RuntimeError("Can't use r-DMFT routines without installing edipack2ineq")
     return bath
 
 
@@ -497,19 +527,22 @@ def save_array_as_bath(self, bath):
         np.ctypeslib.ndpointer(dtype=np.int64, ndim=1, flags="F_CONTIGUOUS"),
     ]
     save_array_as_bath_site.restypes = None
-
-    save_array_as_bath_ineq = self.library.save_array_as_bath_ineq
-    save_array_as_bath_ineq.argtypes = [
-        np.ctypeslib.ndpointer(dtype=float, ndim=2, flags="F_CONTIGUOUS"),
-        np.ctypeslib.ndpointer(dtype=np.int64, ndim=1, flags="F_CONTIGUOUS"),
-    ]
-    save_array_as_bath_ineq.restypes = None
+    if self.has_ineq:
+        save_array_as_bath_ineq = self.library.save_array_as_bath_ineq
+        save_array_as_bath_ineq.argtypes = [
+            np.ctypeslib.ndpointer(dtype=float, ndim=2, flags="F_CONTIGUOUS"),
+            np.ctypeslib.ndpointer(dtype=np.int64, ndim=1, flags="F_CONTIGUOUS"),
+        ]
+        save_array_as_bath_ineq.restypes = None
 
     bath_shape = np.asarray(np.shape(bath), dtype=np.int64, order="F")
     if (len(bath_shape)) == 1:
         save_array_as_bath_site(bath, bath_shape)
     else:
-        save_array_as_bath_ineq(bath, bath_shape)
+        if self.has_ineq:
+            save_array_as_bath_ineq(bath, bath_shape)
+        else:
+            raise RuntimeError("Can't use r-DMFT routines without installing edipack2ineq")
     return
 
 

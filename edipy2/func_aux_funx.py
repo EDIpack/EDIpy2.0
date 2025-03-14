@@ -54,30 +54,31 @@ def set_hloc(self, hloc, Nlat=None):
         np.ctypeslib.ndpointer(dtype=np.int64, ndim=1, flags="F_CONTIGUOUS"),
     ]
     ed_set_Hloc_single_N4.restype = None
+    
+    if self.has_ineq:
+        ed_set_Hloc_lattice_N2 = self.library.ed_set_Hloc_lattice_N2
+        ed_set_Hloc_lattice_N2.argtypes = [
+            np.ctypeslib.ndpointer(dtype=complex, ndim=2, flags="F_CONTIGUOUS"),
+            np.ctypeslib.ndpointer(dtype=np.int64, ndim=1, flags="F_CONTIGUOUS"),
+            c_int,
+        ]
+        ed_set_Hloc_lattice_N2.restype = None
+        if self.has_ineq:
+            ed_set_Hloc_lattice_N3 = self.library.ed_set_Hloc_lattice_N3
+            ed_set_Hloc_lattice_N3.argtypes = [
+                np.ctypeslib.ndpointer(dtype=complex, ndim=3, flags="F_CONTIGUOUS"),
+                np.ctypeslib.ndpointer(dtype=np.int64, ndim=1, flags="F_CONTIGUOUS"),
+                c_int,
+            ]
+            ed_set_Hloc_lattice_N3.restype = None
 
-    ed_set_Hloc_lattice_N2 = self.library.ed_set_Hloc_lattice_N2
-    ed_set_Hloc_lattice_N2.argtypes = [
-        np.ctypeslib.ndpointer(dtype=complex, ndim=2, flags="F_CONTIGUOUS"),
-        np.ctypeslib.ndpointer(dtype=np.int64, ndim=1, flags="F_CONTIGUOUS"),
-        c_int,
-    ]
-    ed_set_Hloc_lattice_N2.restype = None
-
-    ed_set_Hloc_lattice_N3 = self.library.ed_set_Hloc_lattice_N3
-    ed_set_Hloc_lattice_N3.argtypes = [
-        np.ctypeslib.ndpointer(dtype=complex, ndim=3, flags="F_CONTIGUOUS"),
-        np.ctypeslib.ndpointer(dtype=np.int64, ndim=1, flags="F_CONTIGUOUS"),
-        c_int,
-    ]
-    ed_set_Hloc_lattice_N3.restype = None
-
-    ed_set_Hloc_lattice_N5 = self.library.ed_set_Hloc_lattice_N5
-    ed_set_Hloc_lattice_N5.argtypes = [
-        np.ctypeslib.ndpointer(dtype=complex, ndim=5, flags="F_CONTIGUOUS"),
-        np.ctypeslib.ndpointer(dtype=np.int64, ndim=1, flags="F_CONTIGUOUS"),
-        c_int,
-    ]
-    ed_set_Hloc_lattice_N5.restype = None
+            ed_set_Hloc_lattice_N5 = self.library.ed_set_Hloc_lattice_N5
+            ed_set_Hloc_lattice_N5.argtypes = [
+                np.ctypeslib.ndpointer(dtype=complex, ndim=5, flags="F_CONTIGUOUS"),
+                np.ctypeslib.ndpointer(dtype=np.int64, ndim=1, flags="F_CONTIGUOUS"),
+                c_int,
+            ]
+            ed_set_Hloc_lattice_N5.restype = None
 
     try:
         hloc = np.asarray(hloc, order="F")
@@ -87,14 +88,17 @@ def set_hloc(self, hloc, Nlat=None):
         raise ValueError("In Edipack2.0, set_Hloc needs an Hloc defined")
 
     if Nlat is not None:
-        if len(dim_hloc) == 2:
-            ed_set_Hloc_lattice_N2(hloc, dim_hloc, Nlat)
-        elif len(dim_hloc) == 3:
-            ed_set_Hloc_lattice_N3(hloc, dim_hloc, Nlat)
-        elif len(dim_hloc) == 5:
-            ed_set_Hloc_lattice_N5(hloc, dim_hloc, Nlat)
+        if self.has_ineq:
+            if len(dim_hloc) == 2:
+                ed_set_Hloc_lattice_N2(hloc, dim_hloc, Nlat)
+            elif len(dim_hloc) == 3:
+                ed_set_Hloc_lattice_N3(hloc, dim_hloc, Nlat)
+            elif len(dim_hloc) == 5:
+                ed_set_Hloc_lattice_N5(hloc, dim_hloc, Nlat)
+            else:
+                raise ValueError("ed_set_Hloc_lattice: dimension must be 2,3 or 5")
         else:
-            raise ValueError("ed_set_Hloc_lattice: dimension must be 2,3 or 5")
+            raise RuntimeError("Can't use r-DMFT routines without installing edipack2ineq")
     else:
         if len(dim_hloc) == 2:
             ed_set_Hloc_single_N2(hloc, dim_hloc)

@@ -11,8 +11,9 @@ import pkgconfig
 
 # dummy class, to be filled
 class Link:
-    def __init__(self, library):
+    def __init__(self, library, has_ineq):
         self.library = library
+        self.has_ineq = has_ineq
         self.Nineq = None
         self.dim_hloc = 0
         self.Nsym = None
@@ -123,12 +124,14 @@ try:
         sys.path.insert(0, libpath)
         libfile = os.path.join(libpath, "libedineq2py" + libext)
         libedi2py = CDLL(libfile)
+        has_ineq = True
         print("Loaded DMFT + r-DMFT extension")
     except: #no ineq present
         libpath = pkgconfig.variables("edipack2")['libdir']
         sys.path.insert(0, libpath)
         libfile = os.path.join(libpath, "libedi2py" + libext)
         libedi2py = CDLL(libfile)
+        has_ineq = False
         print("Loaded DMFT")
 except:
     print("Couldn't load the libedi2py library. Import will fail.")
@@ -138,7 +141,7 @@ except:
 # Create the global_env class (this is what the python module sees)
 ####################################################################
 
-global_env = Link(libedi2py)
+global_env = Link(libedi2py, has_ineq)
 
 ######################################
 # GLOBAL VARIABLES
