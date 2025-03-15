@@ -11,8 +11,9 @@ import pkgconfig
 
 # dummy class, to be filled
 class Link:
-    def __init__(self, library):
+    def __init__(self, library, has_ineq):
         self.library = library
+        self.has_ineq = has_ineq
         self.Nineq = None
         self.dim_hloc = 0
         self.Nsym = None
@@ -29,7 +30,8 @@ class Link:
         self.COLOREND = "\033[0m"
 
 
-# function that will add a variable to the dummy class, will be called in variable definition
+# function that will add a variable to the dummy class, will be called 
+#in variable definition
 def add_global_variable(obj, dynamic_name, target_object, target_attribute):
     @property
     def getter(self):
@@ -66,7 +68,8 @@ def add_global_variable(obj, dynamic_name, target_object, target_attribute):
 def get_bath_type(self):
     """
 
-     This function returns an integer number related to the value of  :f:var:`bath_type` in the input file
+     This function returns an integer number related to the value of \
+     :f:var:`bath_type` in the input file
 
       - :code:`1` for **normal** bath
       - :code:`2` for **hybrid** bath
@@ -88,7 +91,8 @@ def get_bath_type(self):
 def get_ed_mode(self):
     """
 
-    This function returns an integer number related to the value of  :f:var:`ed_mode` in the input file
+    This function returns an integer number related to the value of \
+    :f:var:`ed_mode` in the input file
 
      - :code:`1` for **normal** mode
      - :code:`2` for **superc** mode
@@ -116,20 +120,20 @@ system = sys.platform
 libext = ".so"
 if system == "darwin":
     libext = ".dylib"
-#add libpath
+# add libpath
 try:
-    try: #try the ineq
-        libpath = pkgconfig.variables("edipack2ineq")['libdir']
+    try:  # try the ineq
+        libpath = pkgconfig.variables("edipack2ineq")["libdir"]
         sys.path.insert(0, libpath)
         libfile = os.path.join(libpath, "libedipack2ineq2py" + libext)
         libedi2py = CDLL(libfile)
-        print("Loaded DMFT + r-DMFT extension")
-    except: #no ineq present
-        libpath = pkgconfig.variables("edipack2")['libdir']
+        has_ineq = True
+    except:  # no ineq present
+        libpath = pkgconfig.variables("edipack2")["libdir"]
         sys.path.insert(0, libpath)
         libfile = os.path.join(libpath, "libedipack2py" + libext)
         libedi2py = CDLL(libfile)
-        print("Loaded DMFT")
+        has_ineq = False
 except:
     print("Couldn't load the libedi2py library. Import will fail.")
     libedi2py = None
@@ -138,47 +142,95 @@ except:
 # Create the global_env class (this is what the python module sees)
 ####################################################################
 
-global_env = Link(libedi2py)
+global_env = Link(libedi2py, has_ineq)
 
 ######################################
 # GLOBAL VARIABLES
 ######################################
 
 try:
-    add_global_variable(global_env, "Nbath", c_int.in_dll(libedi2py, "Nbath"), "value")
-    add_global_variable(global_env, "Norb", c_int.in_dll(libedi2py, "Norb"), "value")
-    add_global_variable(global_env, "Nspin", c_int.in_dll(libedi2py, "Nspin"), "value")
-    add_global_variable(global_env, "Nloop", c_int.in_dll(libedi2py, "Nloop"), "value")
-    add_global_variable(global_env, "Nph", c_int.in_dll(libedi2py, "Nph"), "value")
+    add_global_variable(
+        global_env, "Nbath", c_int.in_dll(libedi2py, "Nbath"), "value"
+    )
+    add_global_variable(
+        global_env, "Norb", c_int.in_dll(libedi2py, "Norb"), "value"
+    )
+    add_global_variable(
+        global_env, "Nspin", c_int.in_dll(libedi2py, "Nspin"), "value"
+    )
+    add_global_variable(
+        global_env, "Nloop", c_int.in_dll(libedi2py, "Nloop"), "value"
+    )
+    add_global_variable(
+        global_env, "Nph", c_int.in_dll(libedi2py, "Nph"), "value"
+    )
     add_global_variable(
         global_env, "Nsuccess", c_int.in_dll(libedi2py, "Nsuccess"), "value"
     )
-    add_global_variable(global_env, "Lmats", c_int.in_dll(libedi2py, "Lmats"), "value")
-    add_global_variable(global_env, "Lreal", c_int.in_dll(libedi2py, "Lreal"), "value")
-    add_global_variable(global_env, "Ltau", c_int.in_dll(libedi2py, "Ltau"), "value")
-    add_global_variable(global_env, "Lfit", c_int.in_dll(libedi2py, "Lfit"), "value")
-    add_global_variable(global_env, "Lpos", c_int.in_dll(libedi2py, "Lpos"), "value")
+    add_global_variable(
+        global_env, "Lmats", c_int.in_dll(libedi2py, "Lmats"), "value"
+    )
+    add_global_variable(
+        global_env, "Lreal", c_int.in_dll(libedi2py, "Lreal"), "value"
+    )
+    add_global_variable(
+        global_env, "Ltau", c_int.in_dll(libedi2py, "Ltau"), "value"
+    )
+    add_global_variable(
+        global_env, "Lfit", c_int.in_dll(libedi2py, "Lfit"), "value"
+    )
+    add_global_variable(
+        global_env, "Lpos", c_int.in_dll(libedi2py, "Lpos"), "value"
+    )
     add_global_variable(
         global_env, "LOGfile", c_int.in_dll(libedi2py, "LOGfile"), "value"
     )
 
     add_global_variable(
-        global_env, "Uloc", ARRAY(c_double, 5).in_dll(libedi2py, "Uloc"), "value"
+        global_env,
+        "Uloc",
+        ARRAY(c_double, 5).in_dll(libedi2py, "Uloc"),
+        "value",
     )
-    add_global_variable(global_env, "Ust", c_double.in_dll(libedi2py, "Ust"), "value")
-    add_global_variable(global_env, "Jh", c_double.in_dll(libedi2py, "Jh"), "value")
-    add_global_variable(global_env, "Jx", c_double.in_dll(libedi2py, "Jx"), "value")
-    add_global_variable(global_env, "Jp", c_double.in_dll(libedi2py, "Jp"), "value")
-    add_global_variable(global_env, "xmu", c_double.in_dll(libedi2py, "xmu"), "value")
-    add_global_variable(global_env, "beta", c_double.in_dll(libedi2py, "beta"), "value")
     add_global_variable(
-        global_env, "dmft_error", c_double.in_dll(libedi2py, "dmft_error"), "value"
+        global_env, "Ust", c_double.in_dll(libedi2py, "Ust"), "value"
     )
-    add_global_variable(global_env, "eps", c_double.in_dll(libedi2py, "eps"), "value")
-    add_global_variable(global_env, "wini", c_double.in_dll(libedi2py, "wini"), "value")
-    add_global_variable(global_env, "wfin", c_double.in_dll(libedi2py, "wfin"), "value")
-    add_global_variable(global_env, "xmin", c_double.in_dll(libedi2py, "xmin"), "value")
-    add_global_variable(global_env, "xmax", c_double.in_dll(libedi2py, "xmax"), "value")
+    add_global_variable(
+        global_env, "Jh", c_double.in_dll(libedi2py, "Jh"), "value"
+    )
+    add_global_variable(
+        global_env, "Jx", c_double.in_dll(libedi2py, "Jx"), "value"
+    )
+    add_global_variable(
+        global_env, "Jp", c_double.in_dll(libedi2py, "Jp"), "value"
+    )
+    add_global_variable(
+        global_env, "xmu", c_double.in_dll(libedi2py, "xmu"), "value"
+    )
+    add_global_variable(
+        global_env, "beta", c_double.in_dll(libedi2py, "beta"), "value"
+    )
+    add_global_variable(
+        global_env,
+        "dmft_error",
+        c_double.in_dll(libedi2py, "dmft_error"),
+        "value",
+    )
+    add_global_variable(
+        global_env, "eps", c_double.in_dll(libedi2py, "eps"), "value"
+    )
+    add_global_variable(
+        global_env, "wini", c_double.in_dll(libedi2py, "wini"), "value"
+    )
+    add_global_variable(
+        global_env, "wfin", c_double.in_dll(libedi2py, "wfin"), "value"
+    )
+    add_global_variable(
+        global_env, "xmin", c_double.in_dll(libedi2py, "xmin"), "value"
+    )
+    add_global_variable(
+        global_env, "xmax", c_double.in_dll(libedi2py, "xmax"), "value"
+    )
     add_global_variable(
         global_env, "sb_field", c_double.in_dll(libedi2py, "sb_field"), "value"
     )
@@ -187,13 +239,18 @@ try:
     )
 
     add_global_variable(
-        global_env, "ed_total_ud", c_bool.in_dll(libedi2py, "ed_total_ud"), "value"
+        global_env,
+        "ed_total_ud",
+        c_bool.in_dll(libedi2py, "ed_total_ud"),
+        "value",
     )
     add_global_variable(
         global_env, "ed_twin", c_bool.in_dll(libedi2py, "ed_twin"), "value"
     )
 except:
-    print("Could not load edipy2 library. Is the python module correctly installed?")
+    print(
+        "Could not load edipy2 library. Is edipack2 (+edipack2ineq) installed?"
+    )
 
 
 ######################################
@@ -207,13 +264,17 @@ global_env.get_ed_mode = types.MethodType(get_ed_mode, global_env)
 # read_input
 from . import func_read_input
 
-global_env.read_input = types.MethodType(func_read_input.read_input, global_env)
+global_env.read_input = types.MethodType(
+    func_read_input.read_input, global_env
+)
 
 # aux_funx
 from . import func_aux_funx
 
 global_env.set_hloc = types.MethodType(func_aux_funx.set_hloc, global_env)
-global_env.search_variable = types.MethodType(func_aux_funx.search_variable, global_env)
+global_env.search_variable = types.MethodType(
+    func_aux_funx.search_variable, global_env
+)
 global_env.check_convergence = types.MethodType(
     func_aux_funx.check_convergence, global_env
 )
@@ -235,7 +296,9 @@ global_env.spin_symmetrize_bath = types.MethodType(
 global_env.orb_symmetrize_bath = types.MethodType(
     func_bath.orb_symmetrize_bath, global_env
 )
-global_env.orb_equality_bath = types.MethodType(func_bath.orb_equality_bath, global_env)
+global_env.orb_equality_bath = types.MethodType(
+    func_bath.orb_equality_bath, global_env
+)
 global_env.ph_symmetrize_bath = types.MethodType(
     func_bath.ph_symmetrize_bath, global_env
 )
@@ -251,7 +314,9 @@ from . import func_main
 
 global_env.init_solver = types.MethodType(func_main.init_solver, global_env)
 global_env.solve = types.MethodType(func_main.solve, global_env)
-global_env.finalize_solver = types.MethodType(func_main.finalize_solver, global_env)
+global_env.finalize_solver = types.MethodType(
+    func_main.finalize_solver, global_env
+)
 
 # io
 from . import func_io
