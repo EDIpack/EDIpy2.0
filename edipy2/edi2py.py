@@ -1,6 +1,7 @@
 from ctypes import *
 import numpy as np
 import os, sys
+from pathlib import Path
 import types
 import pkgconfig
 
@@ -114,7 +115,9 @@ def get_ed_mode(self):
 ######################################
 
 if not pkgconfig.exists("edipack2"):
-    raise RuntimeError(f"Package edipack2 not found in pkg-config.")
+    os.environ['PKG_CONFIG_PATH'] = str(Path.home())+"/.pkgconfig.d"
+    if not pkgconfig.exists("edipack2"):
+        raise RuntimeError(f"Package edipack2 not found in pkg-config.")
 
 system = sys.platform
 libext = ".so"
