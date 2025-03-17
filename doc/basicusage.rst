@@ -1,7 +1,9 @@
 Basic usage
 ==============
 
-The edipy2 module consists mainly of a class called :code:`global_env`. The global variables and the functions of the EDIpack2 library that are exposed to the user are methods of this class. The class needs to be imported at the beginning of the script, along with other useful modules. Numpy is necessary, while mpi4py is strongly recommended.
+The `edipy2` python module detects by default the presence of the Fortran libraries via `pkg-config`. The `EDIpack2.0` library provides an environment module and a `.pc` file which is readable by `pkg-config`. It is by default located in the :code:`~/.pkgconfig.d` directory. The environment variable :code:`PKG_CONFIG_PATH` to include the location of the `.pc` file. If no `.pc` file can be detected, the python module will try, as a backup , to load the library from a custom path that can be provided by setting the environment variable :code:`EDIPACK_PATH` to the folder containing the fortran libraries. If none of the previous attempts succeeds, the module will not not load correctly. 
+
+The `edipy2` module consists mainly of a class called :code:`global_env`. The global variables and the functions of the EDIpack2 library that are exposed to the user are methods of this class. The class needs to be imported at the beginning of the script, along with other useful modules. Numpy is necessary, while mpi4py is strongly recommended.
 
 .. code-block:: python
 

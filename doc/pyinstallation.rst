@@ -36,7 +36,7 @@ to install such Fortran libraries. Once both are set up, the python module can b
    pip install . --break-system-packages
    
 The latter option may not be required in all cases, but it is in recent versions of Debian and OSX. Since no edipy2 package is provided by any distro, this will not create problems. If the user is using a virtual environment, the option is not necessary.
-The python module detects the presence of the Fortran libraries via `pkg-config`. The `EDIpack2.0` library provides an environment module and a `.pc` file which is readable by `pkg-config`. It is by default located in the :code:`~/.pkgconfig.d` directory. If no such file can be detected, the python module will not load correctly. In that case, the user will need to specify manually the location of the `.pc` file by setting the environment variable :code:`PKG_CONFIG_PATH` .
+
 
 
 

@@ -101,9 +101,7 @@ def init_solver(self, bath=None, Nb=None, Nlat=None):
     else:
         if self.has_ineq:
             init_solver_ineq(bath, dim_bath)
-            self.Nineq = np.shape(bath)[
-                0
-            ]  # save number of inequivalent sites
+            self.Nineq = np.shape(bath)[0]  # save number of inequivalent sites
         else:
             raise RuntimeError(
                 "Can't use r-DMFT routines without installing edipack2ineq"

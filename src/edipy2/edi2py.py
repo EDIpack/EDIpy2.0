@@ -31,8 +31,8 @@ class Link:
         self.COLOREND = "\033[0m"
 
 
-# function that will add a variable to the dummy class, will be called 
-#in variable definition
+# function that will add a variable to the dummy class, will be called
+# in variable definition
 def add_global_variable(obj, dynamic_name, target_object, target_attribute):
     @property
     def getter(self):
@@ -114,10 +114,20 @@ def get_ed_mode(self):
 # Load shared library with C-bindings
 ######################################
 
+custompath = ""
+has_ineq = False
+
+# 1st try: use pkgconfig directly
 if not pkgconfig.exists("edipack2"):
-    os.environ['PKG_CONFIG_PATH'] = str(Path.home())+"/.pkgconfig.d"
+    os.environ["PKG_CONFIG_PATH"] = str(Path.home()) + "/.pkgconfig.d"
+    # 2nd try: is the .pc file in the usual path set by dipack
     if not pkgconfig.exists("edipack2"):
-        raise RuntimeError(f"Package edipack2 not found in pkg-config.")
+        try:
+            custompath = os.environ["EDIPACK_PATH"]
+        except:
+            print(
+                f"Package edipack2 not found in pkg-config and no EDIPACK_PATH environment variable set."
+            )
 
 system = sys.platform
 libext = ".so"
@@ -126,19 +136,25 @@ if system == "darwin":
 # add libpath
 try:
     try:  # try the ineq
-        libpath = pkgconfig.variables("edipack2ineq")["libdir"]
+        try:
+            libpath = pkgconfig.variables("edipack2ineq")["libdir"]
+        except:
+            libpath = custompath
         sys.path.insert(0, libpath)
         libfile = os.path.join(libpath, "libedipack2ineq2py" + libext)
         libedi2py = CDLL(libfile)
         has_ineq = True
     except:  # no ineq present
-        libpath = pkgconfig.variables("edipack2")["libdir"]
+        try:
+            libpath = pkgconfig.variables("edipack2")["libdir"]
+        except:
+            libpath = custompath
         sys.path.insert(0, libpath)
         libfile = os.path.join(libpath, "libedipack2py" + libext)
         libedi2py = CDLL(libfile)
         has_ineq = False
 except:
-    print("Couldn't load the libedi2py library. Import will fail.")
+    print("Couldn't load the libedi2py library.")
     libedi2py = None
 
 ####################################################################
@@ -252,7 +268,7 @@ try:
     )
 except:
     print(
-        "Could not load edipy2 library. Is edipack2 (+edipack2ineq) installed?"
+        "Could not setup global vars. Is edipack2 (/edipack2ineq) installed?"
     )
 
 
