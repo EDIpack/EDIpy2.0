@@ -7,7 +7,7 @@ EDIpy2 Install
 Anaconda
 ------------
 
-We provide Linux and MacOS packages for the `Anaconda <https://www.anaconda.com/>`_ distribution. Packages are available for Python version 3.10 and later.
+We provide Linux and MacOS packages for the `Anaconda <https://www.anaconda.com/>`_ distribution. Packages are available for Python version 3.10 and later. The `EDIpack2.0` package contains the `edipy2` python module as well as the `EDIpack2.0 <https://www.github.com/EDIpack/EDIpack2.0/>`_ and `SciFortran <https://www.github.com/scifortran/scifortran/>`_ libraries.
 Once a command-line tool such as `conda <https://www.anaconda.com/>`_ or `mamba <https://mamba.readthedocs.io/en/latest/>`_ is installed, an environment using one of the available python version can be created, and then the EDIpack2.0 package can be installed:
 
 .. code-block:: shell
@@ -17,16 +17,16 @@ Once a command-line tool such as `conda <https://www.anaconda.com/>`_ or `mamba 
    conda install -c conda-forge -c edipack edipack2
 
 
-the python module `edipy2` can then be directly imported.
+the `edipy2` python module can then be directly imported.
 
-Compile from source
+Install from source
 ---------------------
 
-The python module `edipy2` requires:
+The python module `edipy2` requires the
 
-* `SciFortran <https://github.com/scifortran/SciFortran>`_
+* `SciFortran`_
 
-* `EDIpack2 <https://github.com/edipack/EDIpack2.0>`_
+* `EDIpack2.0`_
 
 libraries to be installed beforehand, please see related documentation
 to install such Fortran libraries. Once both are set up, the python module can be installed from the EDIpack2 folder via
@@ -36,7 +36,7 @@ to install such Fortran libraries. Once both are set up, the python module can b
    pip install . --break-system-packages
    
 The latter option may not be required in all cases, but it is in recent versions of Debian and OSX. Since no edipy2 package is provided by any distro, this will not create problems. If the user is using a virtual environment, the option is not necessary.
-
+The python module detects the presence of the Fortran libraries via `pkg-config`. The `EDIpack2.0` library provides an environment module and a `.pc` file which is readable by `pkg-config`. It is by default located in the :code:`~/.pkgconfig.d` directory. If no such file can be detected, the python module will not load correctly. In that case, the user will need to specify manually the location of the `.pc` file by setting the environment variable :code:`PKG_CONFIG_PATH` .
 
 
 

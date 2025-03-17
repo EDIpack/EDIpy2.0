@@ -25,8 +25,8 @@ import sphinxfortran_ng
 
 # -- Project information -----------------------------------------------------
 
-project = u'EDIpack2.0'
-copyright = u'2024, Lorenzo Crippa and Adriano Amaricci'
+project = u'EDIpy2.0'
+copyright = u'2025, Lorenzo Crippa and Adriano Amaricci'
 author = u'Lorenzo Crippa and Adriano Amaricci'
 
 # The short X.Y version
@@ -203,7 +203,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'EDIpack2.tex', u'EDIpack2 documentation',
+    (master_doc, 'EDIpy2.tex', u'EDIpy2.0 documentation',
      u'io', 'manual'),
 ]
 

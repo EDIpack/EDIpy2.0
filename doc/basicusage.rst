@@ -12,7 +12,9 @@ The edipy2 module consists mainly of a class called :code:`global_env`. The glob
     from mpi4py import MPI
     import os,sys
 
-An example driver is provided in the folder :code:`tests/python` of the EDIpack2 repo. The basic steps to follow to run a single loop of DMFT-ED with edipy2 are the following:
+The `EDIpack2.0 <https://www.github.com/EDIpack/EDIpack2.0/>`_ library offers, as an independent module, an interface for real-space DMFT functions (see relevant `documentation <https://edipack.github.io/EDIpack2.0/>`_). `EDIpy2.0` is in principle capable of solving real-space DMFT problems, provided the :code:`edipack2ineq2py.so` library is correctly installed in the system. If this library cannot be found, the python module will disable the real-space DMFT functions, and invoking them will result in a :code:`RuntimeError`. The user can check the availability of the real-space DMFT interface by printing the value of :code:`edipy2.global_env.has_ineq`.
+
+An example driver is provided in the :code:`tests` folder of the `EDIpy2.0` repository. The basic steps to follow to run a single loop of DMFT-ED with edipy2 are the following:
 
 Read the input file
 
