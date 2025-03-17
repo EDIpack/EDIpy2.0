@@ -17,7 +17,7 @@ All the information about the installation, structure and operation of the modul
 is available at [edipack.github.io/EDIpy2.0/](https://edipack.github.io/EDIpy2.0/)  
 
 ### Authors
-[Lorenzo Crippa](https://github.com/lcrippa)
+[Lorenzo Crippa](https://github.com/lcrippa)  
 [Adriano Amaricci](https://github.com/aamaricci)  
 
 
