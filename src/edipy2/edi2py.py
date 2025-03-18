@@ -114,10 +114,10 @@ def get_ed_mode(self):
 # Load shared library with C-bindings
 ######################################
 
-custompath = ""
+custompath = []
 lib_missing = True
 has_ineq = False
-default_pc_dir = ".pkgconfig.d"
+default_pc_dir = ".pkgconfig.da"
 system = sys.platform
 libext = ".dylib" if system == "darwin" else ".so"
 
@@ -134,11 +134,18 @@ if not pkgconfig.exists("edipack2"):
     # 2nd try: is the .pc file in the usual path set by dipack
     if not pkgconfig.exists("edipack2"):
         try:
-            custompath = os.environ["EDIPACK_PATH"].split(os.pathsep)
+            custompath += os.environ["EDIPACK_PATH"].split(os.pathsep)
         except:
-            print(
-                f"Package edipack2 not found in pkg-config and no EDIPACK_PATH environment variable set."
-            )
+            pass
+        try:
+            custompath += os.environ["LD_LIBRARY_PATH"].split(os.pathsep)
+        except:
+            pass
+        try:
+            custompath += os.environ["DYLD_LIBRARY_PATH"].split(os.pathsep)
+        except:
+            pass
+
 # try the ineq
 if lib_missing:
     try:
