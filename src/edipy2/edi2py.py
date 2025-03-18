@@ -115,45 +115,64 @@ def get_ed_mode(self):
 ######################################
 
 custompath = ""
+lib_missing = True
 has_ineq = False
+default_pc_dir = ".pkgconfig.d"
+system = sys.platform
+libext = ".dylib" if system == "darwin" else ".so"
 
 # 1st try: use pkgconfig directly
 if not pkgconfig.exists("edipack2"):
-    os.environ["PKG_CONFIG_PATH"] = str(Path.home()) + "/.pkgconfig.d"
+    try:
+        os.environ["PKG_CONFIG_PATH"] += os.pathsep + os.path.join(
+            Path.home(), default_pc_dir
+        )
+    except:
+        os.environ["PKG_CONFIG_PATH"] = os.path.join(
+            Path.home(), default_pc_dir
+        )
     # 2nd try: is the .pc file in the usual path set by dipack
     if not pkgconfig.exists("edipack2"):
         try:
-            custompath = os.environ["EDIPACK_PATH"]
+            custompath = os.environ["EDIPACK_PATH"].split(os.pathsep)
         except:
             print(
                 f"Package edipack2 not found in pkg-config and no EDIPACK_PATH environment variable set."
             )
+# try the ineq
+if lib_missing:
+    try:
+        libpath = [pkgconfig.variables("edipack2ineq")["libdir"]]
+    except:
+        libpath = custompath
+    for ipath in libpath:
+        try:
+            libfile = os.path.join(ipath, "libedipack2ineq2py" + libext)
+            libedi2py = CDLL(libfile)
+            has_ineq = True
+            lib_missing = False
+            break
+        except:
+            pass
 
-system = sys.platform
-libext = ".so"
-if system == "darwin":
-    libext = ".dylib"
-# add libpath
-try:
-    try:  # try the ineq
+# try the single-site
+if lib_missing:
+    try:
+        libpath = [pkgconfig.variables("edipack2")["libdir"]]
+    except:
+        libpath = custompath
+    for ipath in libpath:
         try:
-            libpath = pkgconfig.variables("edipack2ineq")["libdir"]
+            libfile = os.path.join(ipath, "libedipack2py" + libext)
+            libedi2py = CDLL(libfile)
+            has_ineq = False
+            lib_missing = False
+            break
         except:
-            libpath = custompath
-        sys.path.insert(0, libpath)
-        libfile = os.path.join(libpath, "libedipack2ineq2py" + libext)
-        libedi2py = CDLL(libfile)
-        has_ineq = True
-    except:  # no ineq present
-        try:
-            libpath = pkgconfig.variables("edipack2")["libdir"]
-        except:
-            libpath = custompath
-        sys.path.insert(0, libpath)
-        libfile = os.path.join(libpath, "libedipack2py" + libext)
-        libedi2py = CDLL(libfile)
-        has_ineq = False
-except:
+            pass
+
+# fail
+if lib_missing:
     print("Couldn't load the libedi2py library.")
     libedi2py = None
 
