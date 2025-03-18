@@ -14,7 +14,7 @@ import pkgconfig
 class Link:
     def __init__(self, library, has_ineq):
         self.library = library
-        self.has_ineq = has_ineq
+        self.has_ineq = bool(c_int.in_dll(self.library, "has_ineq").value)
         self.Nineq = None
         self.dim_hloc = 0
         self.Nsym = None
@@ -146,23 +146,7 @@ if not pkgconfig.exists("edipack2"):
         except:
             pass
 
-# try the ineq
-if lib_missing:
-    try:
-        libpath = [pkgconfig.variables("edipack2ineq_cbinding")["libdir"]]
-    except:
-        libpath = custompath
-    for ipath in libpath:
-        try:
-            libfile = os.path.join(ipath, "libedipack2ineq_cbinding" + libext)
-            libedi2py = CDLL(libfile)
-            has_ineq = True
-            lib_missing = False
-            break
-        except:
-            pass
-
-# try the single-site
+# try loading the library
 if lib_missing:
     try:
         libpath = [pkgconfig.variables("edipack2_cbinding")["libdir"]]
@@ -172,7 +156,6 @@ if lib_missing:
         try:
             libfile = os.path.join(ipath, "libedipack2_cbinding" + libext)
             libedi2py = CDLL(libfile)
-            has_ineq = False
             lib_missing = False
             break
         except:
@@ -180,7 +163,7 @@ if lib_missing:
 
 # fail
 if lib_missing:
-    print("Couldn't load any EDIpack library.")
+    print("Couldn't load the edipack2_cbinding library.")
     libedi2py = None
 
 ####################################################################
