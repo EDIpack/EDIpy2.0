@@ -126,12 +126,13 @@ if not pkgconfig.exists("edipack2"):
         os.environ["PKG_CONFIG_PATH"] += os.pathsep + os.path.join(
             Path.home(), default_pc_dir
         )
+# 2nd try: is the .pc file in the usual path set by edipack
     except:
         os.environ["PKG_CONFIG_PATH"] = os.path.join(
             Path.home(), default_pc_dir
         )
-    # 2nd try: is the .pc file in the usual path set by dipack
     if not pkgconfig.exists("edipack2"):
+# 3rd try: look in environment variables
         try:
             custompath += os.environ["EDIPACK_PATH"].split(os.pathsep)
         except:
