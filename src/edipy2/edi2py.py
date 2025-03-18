@@ -12,7 +12,7 @@ import pkgconfig
 
 # dummy class, to be filled
 class Link:
-    def __init__(self, library, has_ineq):
+    def __init__(self, library):
         self.library = library
         self.has_ineq = bool(c_int.in_dll(self.library, "has_ineq").value)
         self.Nineq = None
@@ -116,7 +116,6 @@ def get_ed_mode(self):
 
 custompath = []
 lib_missing = True
-has_ineq = False
 default_pc_dir = ".pkgconfig.d"
 system = sys.platform
 libext = ".dylib" if system == "darwin" else ".so"
@@ -170,7 +169,7 @@ if lib_missing:
 # Create the global_env class (this is what the python module sees)
 ####################################################################
 
-global_env = Link(libedi2py, has_ineq)
+global_env = Link(libedi2py)
 
 ######################################
 # GLOBAL VARIABLES
