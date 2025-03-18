@@ -117,7 +117,7 @@ def get_ed_mode(self):
 custompath = []
 lib_missing = True
 has_ineq = False
-default_pc_dir = ".pkgconfig.da"
+default_pc_dir = ".pkgconfig.d"
 system = sys.platform
 libext = ".dylib" if system == "darwin" else ".so"
 
@@ -149,12 +149,12 @@ if not pkgconfig.exists("edipack2"):
 # try the ineq
 if lib_missing:
     try:
-        libpath = [pkgconfig.variables("edipack2ineq")["libdir"]]
+        libpath = [pkgconfig.variables("edipack2ineq_cbinding")["libdir"]]
     except:
         libpath = custompath
     for ipath in libpath:
         try:
-            libfile = os.path.join(ipath, "libedipack2ineq2py" + libext)
+            libfile = os.path.join(ipath, "libedipack2ineq_cbinding" + libext)
             libedi2py = CDLL(libfile)
             has_ineq = True
             lib_missing = False
@@ -165,12 +165,12 @@ if lib_missing:
 # try the single-site
 if lib_missing:
     try:
-        libpath = [pkgconfig.variables("edipack2")["libdir"]]
+        libpath = [pkgconfig.variables("edipack2_cbinding")["libdir"]]
     except:
         libpath = custompath
     for ipath in libpath:
         try:
-            libfile = os.path.join(ipath, "libedipack2py" + libext)
+            libfile = os.path.join(ipath, "libedipack2_cbinding" + libext)
             libedi2py = CDLL(libfile)
             has_ineq = False
             lib_missing = False
@@ -180,7 +180,7 @@ if lib_missing:
 
 # fail
 if lib_missing:
-    print("Couldn't load the libedi2py library.")
+    print("Couldn't load any EDIpack library.")
     libedi2py = None
 
 ####################################################################
@@ -294,7 +294,7 @@ try:
     )
 except:
     print(
-        "Could not setup global vars. Is edipack2 (/edipack2ineq) installed?"
+        "Could not setup global vars. Is edipack2 (or edipack2ineq) installed?"
     )
 
 
