@@ -24,6 +24,7 @@ Description
 .. toctree::
    :caption: External Links
    
+   EDIpy2.0 on GitHub <https://github.com/edipack/EDIpy2.0>
    EDIpack2.0 on GitHub <https://github.com/edipack/EDIpack2.0>
    SciFortran on GitHub <https://github.com/SciFortran/SciFortran>
 
