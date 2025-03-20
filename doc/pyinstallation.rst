@@ -29,7 +29,7 @@ The python module `edipy2` requires the
 * `EDIpack2.0`_
 
 libraries to be installed beforehand, please see related documentation
-to install such Fortran libraries. Once both are set up, the python module can be installed from the EDIpack2 folder via
+to install such Fortran libraries. Once both are set up, the python module can be installed from the root repository folder via
 
 .. code-block:: shell
 
