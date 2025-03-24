@@ -269,7 +269,7 @@ The exposed global variables can be accessed as properties of the :class:`edipy2
    
 .. data:: edipy2.global_env.xmu
 
-   Value of the chemical potential. If :f:var:`hfmode` = :code:`T`, :f:var:`xmu` = :code:`0` satisfied the half-filling condition
+   Value of the chemical potential. If :f:var:`hfmode` = :code:`T`, :f:var:`xmu` = :code:`0` satisfies the half-filling condition
    
    Accesses :f:var:`xmu`
    
