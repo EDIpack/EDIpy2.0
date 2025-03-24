@@ -1,4 +1,7 @@
 # EDIpy2.0: A Python API for the EDIpack2.0 Quantum Impurity Solver
+[![api docs](https://img.shields.io/static/v1?label=API&message=documentation&color=734f96&logo=read-the-docs&logoColor=white&style=flat-square)](https://edipack.github.io/EDIpy2.0/)
+[![PyPI](https://img.shields.io/pypi/v/edipy2.svg)](https://pypi.org/project/edipy2)
+[![Anaconda-Server Badge](https://anaconda.org/edipack/edipack2/badges/version.svg)](https://anaconda.org/edipack/edipack2)
 
 A Python module interfacing to [EDIpack2.0](https://github.com/edipack/EDIpack2.0), 
 a  Lanczos based method for the solution of generic Quantum Impurity problems, 
