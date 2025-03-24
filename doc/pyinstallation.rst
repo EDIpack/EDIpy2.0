@@ -19,6 +19,13 @@ Once a command-line tool such as `conda <https://www.anaconda.com/>`_ or `mamba 
 
 the `edipy2` python module can then be directly imported.
 
+
+Install with pip
+---------------------
+
+See the package page on `pypi <https://pypi.org/project/edipy2/>`_ .
+
+
 Install from source
 ---------------------
 
