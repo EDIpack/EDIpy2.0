@@ -14,7 +14,10 @@ import pkgconfig
 class Link:
     def __init__(self, library):
         self.library = library
-        self.has_ineq = bool(c_int.in_dll(self.library, "has_ineq").value)
+        try:
+            self.has_ineq = bool(c_int.in_dll(self.library, "has_ineq").value)
+        except:
+            print("Cannot init link class: invalid library")
         self.Nineq = None
         self.dim_hloc = 0
         self.Nsym = None
