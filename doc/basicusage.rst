@@ -3,7 +3,7 @@ Basic usage
 
 Module import
 --------------
-Upon import, the `edipy2` python module will try to load the dynamic library :data:`libedipack2_cbinding.so` , provided by `EDIpack2.0` and containing the c-fortran bindings. The module will try the following routes, in prder of priority:
+Upon import, the `edipy2` python module will try to load the dynamic library :data:`libedipack2_cbinding.so` , provided by `EDIpack2.0` and containing the c-fortran bindings. The module will try the following routes, in order of priority:
 
 * Detect the presence of the Fortran libraries via `pkg-config`. If `EDIpack2.0` was loaded as an environment module, the import will automatically work. 
 * The `EDIpack2.0` library provides a `.pc` , located by default in the :code:`~/.pkgconfig.d` directory. If the environment variable :code:`PKG_CONFIG_PATH` is set to include the location of the `.pc` file, loading the library via `pkg-config` will work as well.
