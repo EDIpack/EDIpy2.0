@@ -282,16 +282,17 @@ def chi2_fitgf(self, *args, ispin=0, iorb=None, fmpi=True):
     if len(args) == 2:  # normal
         g = np.asarray(args[0], order="F")
         bath = np.asarray(args[1], order="F")
+        bath_copy = np.copy(bath)
         dim_g = np.asarray(np.shape(g), dtype=np.int64, order="F")
-        dim_bath = np.asarray(np.shape(bath), dtype=np.int64, order="F")
+        dim_bath = np.asarray(np.shape(bath_copy), dtype=np.int64, order="F")
         if len(dim_bath) == 1:  # single
             if len(dim_g) == 3:
                 chi2_fitgf_single_normal_n3(
-                    g, dim_g, bath, dim_bath, ispin, iorb, fmpi
+                    g, dim_g, bath_copy, dim_bath, ispin, iorb, fmpi
                 )
             elif len(dim_g) == 5:
                 chi2_fitgf_single_normal_n5(
-                    g, dim_g, bath, dim_bath, ispin, iorb, fmpi
+                    g, dim_g, bath_copy, dim_bath, ispin, iorb, fmpi
                 )
             else:
                 raise ValueError("chi_fitgf_normal: takes dim(g) = 3 or 5")
@@ -299,15 +300,15 @@ def chi2_fitgf(self, *args, ispin=0, iorb=None, fmpi=True):
             if self.has_ineq:
                 if len(dim_g) == 3:
                     chi2_fitgf_lattice_normal_n3(
-                        g, dim_g, bath, dim_bath, ispin
+                        g, dim_g, bath_copy, dim_bath, ispin
                     )
                 if len(dim_g) == 4:
                     chi2_fitgf_lattice_normal_n4(
-                        g, dim_g, bath, dim_bath, ispin
+                        g, dim_g, bath_copy, dim_bath, ispin
                     )
                 elif len(dim_g) == 6:
                     chi2_fitgf_lattice_normal_n6(
-                        g, dim_g, bath, dim_bath, ispin
+                        g, dim_g, bath_copy, dim_bath, ispin
                     )
                 else:
                     raise ValueError("chi_fitgf_normal: takes dim(g) = 3 or 5")
@@ -321,17 +322,18 @@ def chi2_fitgf(self, *args, ispin=0, iorb=None, fmpi=True):
         g = np.asarray(args[0], order="F")
         f = np.asarray(args[1], order="F")
         bath = np.asarray(args[2], order="F")
+        bath_copy = np.copy(bath)
         dim_g = np.asarray(np.shape(g), dtype=np.int64, order="F")
         dim_f = np.asarray(np.shape(g), dtype=np.int64, order="F")
-        dim_bath = np.asarray(np.shape(bath), dtype=np.int64, order="F")
+        dim_bath = np.asarray(np.shape(bath_copy), dtype=np.int64, order="F")
         if len(dim_bath) == 1:  # single
             if len(dim_g) == 3:
                 chi2_fitgf_single_superc_n3(
-                    g, dim_g, f, dim_f, bath, dim_bath, ispin, iorb, fmpi
+                    g, dim_g, f, dim_f, bath_copy, dim_bath, ispin, iorb, fmpi
                 )
             elif len(dim_g) == 5:
                 chi2_fitgf_single_superc_n5(
-                    g, dim_g, f, dim_f, bath, dim_bath, ispin, iorb, fmpi
+                    g, dim_g, f, dim_f, bath_copy, dim_bath, ispin, iorb, fmpi
                 )
             else:
                 raise ValueError("chi_fitgf_superc: takes dim(g,f) = 3 or 5")
@@ -339,15 +341,15 @@ def chi2_fitgf(self, *args, ispin=0, iorb=None, fmpi=True):
             if self.has_ineq:
                 if len(dim_g) == 3:
                     chi2_fitgf_lattice_superc_n3(
-                        g, dim_g, f, dim_f, bath, dim_bath, ispin
+                        g, dim_g, f, dim_f, bath_copy, dim_bath, ispin
                     )
                 if len(dim_g) == 4:
                     chi2_fitgf_lattice_superc_n4(
-                        g, dim_g, f, dim_f, bath, dim_bath, ispin
+                        g, dim_g, f, dim_f, bath_copy, dim_bath, ispin
                     )
                 elif len(dim_g) == 6:
                     chi2_fitgf_lattice_superc_n6(
-                        g, dim_g, f, dim_f, bath, dim_bath, ispin
+                        g, dim_g, f, dim_f, bath_copy, dim_bath, ispin
                     )
                 else:
                     raise ValueError(
@@ -361,4 +363,4 @@ def chi2_fitgf(self, *args, ispin=0, iorb=None, fmpi=True):
             raise ValueError("chi_fitgf_superc: takes dim(bath) = 1 or 2")
     else:
         raise ValueError("chi_fitgf: takes g,bath or g,f,bath")
-    return bath
+    return bath_copy
