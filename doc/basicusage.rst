@@ -8,7 +8,7 @@ Upon import, the `edipy2` python module will try to load the dynamic library :da
 * As a first choice, the user can override the location of the library by exporting an environment variable called :code:`EDIPACK_PATH` .
 * By default, the module detects the presence of the Fortran libraries via `pkg-config`. If `EDIpack2.0` was loaded as an environment module, the import will automatically work. 
 * The `EDIpack2.0` library provides a `.pc` , located by default in the :code:`~/.pkgconfig.d` directory. If the environment variable :code:`PKG_CONFIG_PATH` is set to include the location of the `.pc` file, loading the library via `pkg-config` will work as well.
-* If no :code:`EDIPACK_PATH` variable is set, as a last resort :code:`LD_LIBRARY_PATH` and :code:`DYLD_LIBRARY_PATH` are scanned. 
+* As a last resort :code:`LD_LIBRARY_PATH` and :code:`DYLD_LIBRARY_PATH` are scanned. 
 
 If none of the previous attempts succeeds, the module will not not load correctly and an error message will be printed. 
 
