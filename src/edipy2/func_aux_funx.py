@@ -96,7 +96,7 @@ def set_hloc(self, hloc, Nlat=None):
         hloc = np.asarray(hloc, order="F")
         dim_hloc = np.asarray(np.shape(hloc), dtype=np.int64, order="F")
         self.dim_hloc = len(dim_hloc)
-    except:
+    except Exception:
         raise ValueError("In Edipack2.0, set_Hloc needs an Hloc defined")
 
     if Nlat is not None:
@@ -209,7 +209,7 @@ def check_convergence(self, func, threshold=None, N1=None, N2=None):
 
         comm = MPI.COMM_WORLD
         rank = comm.Get_rank()
-    except:
+    except Exception:
         rank = 0
 
     func = np.asarray(func)
@@ -336,6 +336,6 @@ def check_convergence(self, func, threshold=None, N1=None, N2=None):
         conv_bool = comm.bcast(conv_bool, root=0)
         err = comm.bcast(err, root=0)
         sys.stdout.flush()
-    except:
+    except Exception:
         pass
     return err, conv_bool

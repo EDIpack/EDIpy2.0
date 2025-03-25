@@ -705,7 +705,7 @@ def bath_inspect(self, bath=None, e=None, v=None, d=None, u=None, l=None):
                     raise ValueError("e must be (nspin,norb,nbath)")
                 if np.shape(v) != (aux_nspin, aux_norb, aux_nbath):
                     raise ValueError("v must be (nspin,norb,nbath)")
-            except:
+            except Exception:
                 print(np.shape(e))
                 print(np.shape(v))
                 raise ValueError("e or v have wrong dimension")
@@ -786,7 +786,7 @@ def bath_inspect(self, bath=None, e=None, v=None, d=None, u=None, l=None):
                     raise ValueError("d must be (nspin,norb,nbath)")
                 if np.shape(v) != (aux_nspin, aux_norb, aux_nbath):
                     raise ValueError("v must be (nspin,norb,nbath)")
-            except:
+            except Exception:
                 raise ValueError("e,d or v have wrong dimension")
 
             Nb = self.get_bath_dimension()
@@ -886,7 +886,7 @@ def bath_inspect(self, bath=None, e=None, v=None, d=None, u=None, l=None):
                     raise ValueError("v must be (nspin,norb,nbath)")
                 if np.shape(u) != (aux_nspin, aux_norb, aux_nbath):
                     raise ValueError("u must be (nspin,norb,nbath)")
-            except:
+            except Exception:
                 raise ValueError("e,v or u have wrong dimension")
 
             Nb = self.get_bath_dimension()
@@ -983,7 +983,7 @@ def bath_inspect(self, bath=None, e=None, v=None, d=None, u=None, l=None):
                     raise ValueError("e must be (nspin,nbath)")
                 if np.shape(v) != (aux_nspin, aux_norb, aux_nbath):
                     raise ValueError("v must be (nspin,norb,nbath)")
-            except:
+            except Exception:
                 print(np.shape(e))
                 print(np.shape(v))
                 raise ValueError("e or v have wrong dimension")
@@ -1052,7 +1052,7 @@ def bath_inspect(self, bath=None, e=None, v=None, d=None, u=None, l=None):
                     raise ValueError("d must be (nspin,nbath)")
                 if np.shape(v) != (aux_nspin, aux_norb, aux_nbath):
                     raise ValueError("v must be (nspin,norb,nbath)")
-            except:
+            except Exception:
                 raise ValueError("e,d or v have wrong dimension")
 
             Nb = self.get_bath_dimension()
@@ -1128,7 +1128,7 @@ def bath_inspect(self, bath=None, e=None, v=None, d=None, u=None, l=None):
                     raise ValueError("v must be (nspin,norb,nbath)")
                 if np.shape(u) != (aux_nspin, aux_norb, aux_nbath):
                     raise ValueError("u must be (nspin,norb,nbath)")
-            except:
+            except Exception:
                 raise ValueError("e,v or u have wrong dimension")
 
             Nb = self.get_bath_dimension()

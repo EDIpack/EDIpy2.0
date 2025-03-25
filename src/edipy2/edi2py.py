@@ -16,7 +16,7 @@ class Link:
         self.library = library
         try:
             self.has_ineq = bool(c_int.in_dll(self.library, "has_ineq").value)
-        except:
+        except Exception:
             self.has_ineq = None
             print("Cannot init link class: invalid library")
         self.Nineq = None
@@ -44,9 +44,9 @@ def add_global_variable(obj, dynamic_name, target_object, target_attribute):
             attrib = getattr(target_object, target_attribute)
             try:  # this is for strings
                 attrib = attrib.decode()
-            except:
+            except Exception:
                 pass
-        except:  # this is for arrays
+        except Exception:  # this is for arrays
             if len(target_object) > 1:
                 return [target_object[x] for x in range(len(target_object))]
         return attrib
@@ -57,10 +57,10 @@ def add_global_variable(obj, dynamic_name, target_object, target_attribute):
             if len(target_object) > 1:
                 minlength = min(len(target_object), len(new_value))
                 target_object[0:minlength] = new_value[0:minlength]
-        except:
+        except Exception:
             try:
                 new_value = new_value.encode()
-            except:
+            except Exception:
                 pass
             setattr(target_object, target_attribute, new_value)
 
@@ -130,7 +130,7 @@ if not pkgconfig.exists("edipack2"):
             Path.home(), default_pc_dir
         )
 # 2nd try: is the .pc file in the usual path set by edipack
-    except:
+    except Exception:
         os.environ["PKG_CONFIG_PATH"] = os.path.join(
             Path.home(), default_pc_dir
         )
@@ -138,25 +138,26 @@ if not pkgconfig.exists("edipack2"):
 # 3rd try: look in environment variables
         try:
             custompath += os.environ["EDIPACK_PATH"].split(os.pathsep)
-        except:
+        except Exception:
             pass
         try:
             custompath += os.environ["LD_LIBRARY_PATH"].split(os.pathsep)
-        except:
+        except Exception:
             pass
         try:
             custompath += os.environ["DYLD_LIBRARY_PATH"].split(os.pathsep)
-        except:
+        except Exception:
             pass
 
 # set the path
 try:
     libpath = [pkgconfig.variables("edipack2_cbinding")["libdir"]]
-except:
+except Exception:
     libpath = custompath
 
 # try loading the library
 libedi2py = None
+error_message = []
 
 for ipath in libpath:
     try:
@@ -164,8 +165,11 @@ for ipath in libpath:
         libedi2py = CDLL(libfile)
         break
     except Exception as e:
-        print("Library loading failed with this error:")
-        print(str(e).split("\n")[-1])
+        error_message.append(str(e).split("\n")[-1])
+else:
+    print("Library loading failed. List of error messages:")
+    print(*error_message, sep='\n')
+    
 
 
 ####################################################################
@@ -277,7 +281,7 @@ try:
     add_global_variable(
         global_env, "ed_twin", c_bool.in_dll(libedi2py, "ed_twin"), "value"
     )
-except:
+except Exception:
     print(
         "Could not setup global vars. Is edipack2 (or edipack2ineq) installed?"
     )
