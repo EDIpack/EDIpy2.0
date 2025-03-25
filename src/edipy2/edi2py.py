@@ -165,7 +165,7 @@ for ipath in libpath:
         libedi2py = CDLL(libfile)
         break
     except Exception as e:
-        error_message.append(str(e).split("\n")[-1])
+        error_message.append(str(e))
 else:
     print("Library loading failed. List of error messages:")
     print(*error_message, sep='\n')
