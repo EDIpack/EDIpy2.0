@@ -156,16 +156,16 @@ except:
     libpath = custompath
 
 # try loading the library
+libedi2py = None
+
 for ipath in libpath:
     try:
         libfile = os.path.join(ipath, "libedipack2_cbinding" + libext)
         libedi2py = CDLL(libfile)
         break
-    except:
-        libedi2py = None
+    except Exception as e:
         print("Library loading failed with this error:")
-        #print(str(e).split("\n")[-1])
-        pass
+        print(str(e).split("\n")[-1])
 
 
 ####################################################################
