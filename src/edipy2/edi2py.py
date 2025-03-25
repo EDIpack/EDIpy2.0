@@ -17,6 +17,7 @@ class Link:
         try:
             self.has_ineq = bool(c_int.in_dll(self.library, "has_ineq").value)
         except:
+            self.has_ineq = None
             print("Cannot init link class: invalid library")
         self.Nineq = None
         self.dim_hloc = 0
@@ -118,7 +119,6 @@ def get_ed_mode(self):
 ######################################
 
 custompath = []
-lib_missing = True
 default_pc_dir = ".pkgconfig.d"
 system = sys.platform
 libext = ".dylib" if system == "darwin" else ".so"
@@ -150,24 +150,20 @@ if not pkgconfig.exists("edipack2"):
             pass
 
 # try loading the library
-if lib_missing:
+try:
+    libpath = [pkgconfig.variables("edipack2_cbinding")["libdir"]]
+except:
+    libpath = custompath
+for ipath in libpath:
     try:
-        libpath = [pkgconfig.variables("edipack2_cbinding")["libdir"]]
-    except:
-        libpath = custompath
-    for ipath in libpath:
-        try:
-            libfile = os.path.join(ipath, "libedipack2_cbinding" + libext)
-            libedi2py = CDLL(libfile)
-            lib_missing = False
-            break
-        except:
-            pass
+        libfile = os.path.join(ipath, "libedipack2_cbinding" + libext)
+        libedi2py = CDLL(libfile)
+        break
+    except Exception as e:
+        libedi2py = None
+        print("Library loading failed with this error:")
+        print(str(e).split("\n")[-1])
 
-# fail
-if lib_missing:
-    print("Couldn't load the edipack2_cbinding library.")
-    libedi2py = None
 
 ####################################################################
 # Create the global_env class (this is what the python module sees)
