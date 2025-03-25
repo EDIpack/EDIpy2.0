@@ -165,6 +165,7 @@ for ipath in libpath:
         libedi2py = None
         print("Library loading failed with this error:")
         #print(str(e).split("\n")[-1])
+        pass
 
 
 ####################################################################
