@@ -7,7 +7,8 @@ import types
 # get_bath_dimension
 def get_bath_dimension(self):
     """
-    This function returns the correct dimension for the bath to be allocated (for each impurity) given the parameters of the system.
+    This function returns the correct dimension for the bath to be allocated \
+    (for each impurity) given the parameters of the system.
 
     :return: a number which is the dimension of the bath array for each impurity.
     :rtype: int
@@ -22,21 +23,26 @@ def get_bath_dimension(self):
 def set_hreplica(self, hvec, lambdavec):
     """
 
-       This function is specific to :f:var:`bath_type` = :code:`=replica`. It sets the basis of matrices\
-       and scalar parameters that, upon linear combination, make up the bath replica.
+       This function is specific to :f:var:`bath_type` = :code:`=replica`. \
+       It sets the basis of matrices and scalar parameters that, \
+       upon linear combination, make up the bath replica.
         
        :type hvec: np.array(dtype=complex)
-       :param hvec: array of bath matrices. They decompose the nonzero part of the replica in a set.\
-       Each element of the set correspond to a variational parameter.\
+       :param hvec: array of bath matrices. They decompose the nonzero part of \
+       the replica in a set. Each element of the set correspond to a \
+       variational parameter.\
        That way the bath replica matrix is updated while preserving symmetries\
        of the user's choosing. The array can have the following shapes:
 
-        * [ :code:`(Nnambu)` :math:`\\cdot` :data:`Nspin` :math:`\\cdot` :data:`Norb` , :code:`(Nnambu)` :math:`\\cdot` :data:`Nspin` :math:`\\cdot` :data:`Norb` , :code:`Nsym` ]:\
+        * [ :code:`(Nnambu)` :math:`\\cdot` :data:`Nspin` :math:`\\cdot` \
+        :data:`Norb` , :code:`(Nnambu)` :math:`\\cdot` :data:`Nspin` \
+        :math:`\\cdot` :data:`Norb` , :code:`Nsym` ]:\
         3-dimensional, where Nnambu refers to the superconducting case and Nsym \
         is the number of matrices that make up the linear combination 
-        * [:code:`(Nnambu)` :math:`\\cdot` :data:`Nspin` , :code:`(Nnambu)`  :data:`Nspin` ,  :data:`Norb` ,  :data:`Norb` , :code:`Nsym` ]:\
-        5-dimensional, where Nnambu refers to the superconducting case and Nsym is \
-        the number of matrices that make up the linear combination 
+        * [:code:`(Nnambu)` :math:`\\cdot` :data:`Nspin` , :code:`(Nnambu)` \
+        :data:`Nspin` ,  :data:`Norb` ,  :data:`Norb` , :code:`Nsym` ]:\
+        5-dimensional, where Nnambu refers to the superconducting case and Nsym \
+        is the number of matrices that make up the linear combination 
         
        :type lambdavec: np.array(dtype=float) 
        :param lambdavec: the array of coefficients of the linear combination.\
@@ -45,9 +51,9 @@ def set_hreplica(self, hvec, lambdavec):
        
         * [ :data:`Nbath` , :code:`Nsym` ]: for single-impurity DMFT, 2-dimensional,\
         where Nsym is the number of matrices that make up the linear combination 
-        * [ :code:`Nlat`,  :data:`Nbath` , :code:`Nsym` ]: for real-space DMFT, 3-dimensional,\
-        where Nlat is the number of inequivalent impurity sites and Nsym is\
-        the number of matrices that make up the linear combination 
+        * [ :code:`Nlat`,  :data:`Nbath` , :code:`Nsym` ]: for real-space DMFT, \
+        3-dimensional, where Nlat is the number of inequivalent impurity sites \
+        and Nsym is the number of matrices that make up the linear combination 
 
        :raise ValueError: if the shapes of the arrays are inconsistent
          
@@ -153,19 +159,21 @@ def set_hreplica(self, hvec, lambdavec):
 # init_hgeneral
 def set_hgeneral(self, hvec, lambdavec):
     """
-       This function is specific to :code:`BATH_TYPE=GENERAL`. It sets the basis of matrices\
-       and scalar parameters that, upon linear combination, make up the bath replica. \
+       This function is specific to :code:`BATH_TYPE=GENERAL`. It sets the \
+       basis of matrices and scalar parameters that, upon linear combination, \
+       make up the bath replica. \
        The input is the same as that of :func:`set_hreplica`.
         
        :type hvec: np.array(dtype=complex)
-       :param hvec: array of bath matrices. They decompose the nonzero part of the replica in a set.\
+       :param hvec: array of bath matrices. They decompose the nonzero part of \
+       the replica in a set.\
        Each element of the set correspond to a variational parameter.\
        That way the bath replica matrix is updated while preserving symmetries\
        of the user's choosing. The array can have the following shapes:
 
-        * [:code:`(Nnambu)` :math:`\\cdot`:data:`Nspin` :math:`\\cdot` :data:`Norb` ,\
-        :code:`(Nnambu)` :math:`\\cdot` :data:`Nspin` :math:`\\cdot` \
-        :data:`Norb` , :code:`Nsym` ]:\
+        * [:code:`(Nnambu)` :math:`\\cdot`:data:`Nspin` :math:`\\cdot` \
+        :data:`Norb` , :code:`(Nnambu)` :math:`\\cdot` :data:`Nspin` \
+        :math:`\\cdot` :data:`Norb` , :code:`Nsym` ]:\
         3-dimensional, where Nnambu refers to the superconducting case and Nsym \
         is the number of matrices that make up the linear combination 
         * [:code:`(Nnambu)` :math:`\\cdot` :data:`Nspin` , :code:`(Nnambu)` \
@@ -361,7 +369,8 @@ def break_symmetry_bath(self, bath, field, sign, save=True):
 def spin_symmetrize_bath(self, bath, save=True):
     """
        This function enforces equality of the opposite-spin components\
-       of the bath array. Not compatible with :code:`REPLICA` or :code:`GENERAL` bath types.
+       of the bath array. Not compatible with :code:`REPLICA` or \
+       :code:`GENERAL` bath types.
 
        :type bath: np.array(dtype=float)
        :param bath: The user-accessible bath array
@@ -410,7 +419,8 @@ def spin_symmetrize_bath(self, bath, save=True):
 def orb_symmetrize_bath(self, bath, orb1, orb2, save=True):
     """
        This function enforces equality of the different-orbital components \
-       of the bath array. Not compatible with :code:`REPLICA` or :code:`GENERAL` bath types.
+       of the bath array. Not compatible with :code:`REPLICA` or \
+       :code:`GENERAL` bath types.
 
        :type bath: np.array(dtype=float)
        :param bath: The user-accessible bath array
