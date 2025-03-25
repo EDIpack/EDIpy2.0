@@ -122,44 +122,46 @@ custompath = []
 default_pc_dir = ".pkgconfig.d"
 system = sys.platform
 libext = ".dylib" if system == "darwin" else ".so"
+pathlist = []
 
-# 1st try: use pkgconfig directly
-if not pkgconfig.exists("edipack2"):
+#1st try: use custom env variable
+try:
+    pathlist += os.environ["EDIPACK_PATH"].split(os.pathsep)
+except Exception:
+    pass
+
+# 2nd try: use pkgconfig directly
+if  pkgconfig.exists("edipack2"):
+    pathlist += [pkgconfig.variables("edipack2_cbinding")["libdir"]]
+
+# 3rd try: check PKG_CONFIG_PATH
+else:
     try:
         os.environ["PKG_CONFIG_PATH"] += os.pathsep + os.path.join(
             Path.home(), default_pc_dir
         )
-# 2nd try: is the .pc file in the usual path set by edipack
     except Exception:
         os.environ["PKG_CONFIG_PATH"] = os.path.join(
             Path.home(), default_pc_dir
         )
-    if not pkgconfig.exists("edipack2"):
-# 3rd try: look in environment variables
-        try:
-            custompath += os.environ["EDIPACK_PATH"].split(os.pathsep)
-        except Exception:
-            pass
-        try:
-            custompath += os.environ["LD_LIBRARY_PATH"].split(os.pathsep)
-        except Exception:
-            pass
-        try:
-            custompath += os.environ["DYLD_LIBRARY_PATH"].split(os.pathsep)
-        except Exception:
-            pass
-
-# set the path
+    if pkgconfig.exists("edipack2"):
+        pathlist += [pkgconfig.variables("edipack2_cbinding")["libdir"]]
+        
+# 4th try: look in standard environment variables
 try:
-    libpath = [pkgconfig.variables("edipack2_cbinding")["libdir"]]
+    pathlist += os.environ["LD_LIBRARY_PATH"].split(os.pathsep)
 except Exception:
-    libpath = custompath
+    pass
+try:
+    pathlist += os.environ["DYLD_LIBRARY_PATH"].split(os.pathsep)
+except Exception:
+    pass
 
 # try loading the library
 libedi2py = None
 error_message = []
 
-for ipath in libpath:
+for ipath in pathlist:
     try:
         libfile = os.path.join(ipath, "libedipack2_cbinding" + libext)
         libedi2py = CDLL(libfile)
