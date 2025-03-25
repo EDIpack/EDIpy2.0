@@ -149,11 +149,13 @@ if not pkgconfig.exists("edipack2"):
         except:
             pass
 
-# try loading the library
+# set the path
 try:
     libpath = [pkgconfig.variables("edipack2_cbinding")["libdir"]]
 except:
     libpath = custompath
+
+# try loading the library
 for ipath in libpath:
     try:
         libfile = os.path.join(ipath, "libedipack2_cbinding" + libext)
@@ -162,7 +164,7 @@ for ipath in libpath:
     except Exception as e:
         libedi2py = None
         print("Library loading failed with this error:")
-        print(str(e).split("\n")[-1])
+        #print(str(e).split("\n")[-1])
 
 
 ####################################################################
