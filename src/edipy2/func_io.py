@@ -333,7 +333,7 @@ def get_eimp(self, ilat=None, ikind=None):
        :param ikind: index of the component. It is
         
         * :code:`1`: ed_Epot: the potential energy from interaction
-        * :code:`2`: ed_Eint: ed-Epot - ed_Ehartree (? it is not assigned) 
+        * :code:`2`: ed_Eint: ed-Epot - ed_Ehartree
         * :code:`3`: ed_Ehartree: Hartree part of interaction energy
         * :code:`4`: ed_Eknot: on-site part of the kinetic term
        
