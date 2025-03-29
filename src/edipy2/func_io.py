@@ -609,7 +609,7 @@ def get_sigma(self, ilat=None, ishape=None, axis="m", typ="n", zeta=None):
                     dtype=complex,
                     order="F",
                 )
-                ed_get_sigma_site_n3(
+                ed_get_sigma_lattice_n3(
                     Sigma, self.Nineq, axisint, typint, zeta, nfreq, zflag
                 )
             elif ishape == 4:
@@ -623,7 +623,7 @@ def get_sigma(self, ilat=None, ishape=None, axis="m", typ="n", zeta=None):
                     dtype=complex,
                     order="F",
                 )
-                ed_get_sigma_site_n4(
+                ed_get_sigma_lattice_n4(
                     Sigma, self.Nineq, axisint, typint, zeta, nfreq, zflag
                 )
             elif ishape == 6:
@@ -639,7 +639,7 @@ def get_sigma(self, ilat=None, ishape=None, axis="m", typ="n", zeta=None):
                     dtype=complex,
                     order="F",
                 )
-                ed_get_sigma_site_n6(
+                ed_get_sigma_lattice_n6(
                     Sigma, self.Nineq, axisint, typint, zeta, nfreq, zflag
                 )
             else:
@@ -880,7 +880,7 @@ def get_gimp(self, ilat=None, ishape=None, axis="m", typ="n", zeta=None):
                     dtype=complex,
                     order="F",
                 )
-                ed_get_gimp_site_n3(
+                ed_get_gimp_lattice_n3(
                     gimp, self.Nineq, axisint, typint, zeta, nfreq, zflag
                 )
             elif ishape == 4:
@@ -894,7 +894,7 @@ def get_gimp(self, ilat=None, ishape=None, axis="m", typ="n", zeta=None):
                     dtype=complex,
                     order="F",
                 )
-                ed_get_gimp_site_n4(
+                ed_get_gimp_lattice_n4(
                     gimp, self.Nineq, axisint, typint, zeta, nfreq, zflag
                 )
             elif ishape == 6:
@@ -910,7 +910,7 @@ def get_gimp(self, ilat=None, ishape=None, axis="m", typ="n", zeta=None):
                     dtype=complex,
                     order="F",
                 )
-                ed_get_gimp_site_n6(
+                ed_get_gimp_lattice_n6(
                     gimp, self.Nineq, axisint, typint, zeta, nfreq, zflag
                 )
             else:
