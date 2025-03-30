@@ -55,6 +55,8 @@ def add_global_variable(obj, dynamic_name, target_object, target_attribute):
     def setter(self, new_value):
         try:  # this is for arrays
             if len(target_object) > 1:
+                if np.isscalar(new_value):
+                    new_value=[new_value]
                 minlength = min(len(target_object), len(new_value))
                 target_object[0:minlength] = new_value[0:minlength]
         except Exception:
