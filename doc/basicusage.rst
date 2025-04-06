@@ -29,7 +29,7 @@ The `edipy2` module consists mainly of a class called :code:`global_env`. The gl
 Minimal DMFT loop
 -------------------
 
-An example driver is provided in the :code:`tests` folder of the `EDIpy2.0` repository. The basic steps to follow to run a single loop of DMFT-ED with edipy2 are the following:
+An example driver is provided in the :code:`examples` folder of the `EDIpy2.0` repository. The basic steps to follow to run a single loop of DMFT-ED with edipy2 are the following:
 
 Read the input file
 
@@ -37,7 +37,7 @@ Read the input file
 
     ed.read_input("inputED.conf")
     
-This will read an input file or generate a template one if no such file is found. The template will have the :code:`used.` prefix, which will need to be removed. An `example <https://raw.githubusercontent.com/edipack/EDIpack2.0/refs/heads/master/test/python/inputED.conf>`_ of input file with a brief description of the relevant global variables is provided in the EDIpack2 repo.
+This will read an input file or generate a template one if no such file is found. The template will have the :code:`used.` prefix, which will need to be removed. An `example <https://raw.githubusercontent.com/EDIpack/EDIpy2.0/refs/heads/main/examples/inputED.conf>`_ of input file with a brief description of the relevant global variables is provided in the EDIpack2 repo.
     
 Set the local Hamiltonian
 
