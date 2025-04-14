@@ -124,7 +124,7 @@ def set_hreplica(self, hvec, lambdavec):
             init_hreplica_symmetries_d3(
                 hvec, dim_hvec, lambdavec, dim_lambdavec
             )
-        elif len(Ddim_lambdavec) == 3:
+        elif len(dim_lambdavec) == 3:
             if self.has_ineq:
                 init_hreplica_symmetries_lattice_d3(
                     hvec, dim_hvec, lambdavec, dim_lambdavec
@@ -262,7 +262,7 @@ def set_hgeneral(self, hvec, lambdavec):
             init_hgeneral_symmetries_d3(
                 hvec, dim_hvec, lambdavec, dim_lambdavec
             )
-        elif len(Ddim_lambdavec) == 3:
+        elif len(dim_lambdavec) == 3:
             if self.has_ineq:
                 init_hgeneral_symmetries_lattice_d3(
                     hvec, dim_hvec, lambdavec, dim_lambdavec
