@@ -308,8 +308,12 @@ def break_symmetry_bath(self, bath, field, sign, save=True):
     :type field: float
     :param field: the magnitude of the symmetry-breaking shift
    
-    :type sign: float
-    :param sign: the sign of the symmetry-breaking shift
+    :type sign: float or np.array(dtype=float)
+    :param sign: the sign of the symmetry-breaking shift. In the case of \
+     real-space DMFT, this function supports an array of floats of the same \
+     shape of bath along dimension 0. If a scalar is passed, it is \
+     automatically converted into a constant array of the appropriate 
+     dimension. \
    
     :type save: bool
     :param save: whether to save the symmetry-broken bath for reading
@@ -337,7 +341,7 @@ def break_symmetry_bath(self, bath, field, sign, save=True):
                 dtype=np.int64, ndim=1, flags="F_CONTIGUOUS"
             ),
             c_double,
-            c_double,
+            np.ctypeslib.ndpointer(dtype=float, ndim=1, flags="F_CONTIGUOUS"),
             c_int,
         ]
         break_symmetry_bath_ineq.restype = None
@@ -353,8 +357,9 @@ def break_symmetry_bath(self, bath, field, sign, save=True):
         )
     else:
         if self.has_ineq:
+            sign = sign * np.ones(bath_shape[0], order="F")
             break_symmetry_bath_ineq(
-                bath, bath_shape, field, float(sign), save_int
+                bath, bath_shape, field, sign, save_int
             )
         else:
             raise RuntimeError(

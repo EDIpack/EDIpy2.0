@@ -15,7 +15,7 @@ def chi2_fitgf(self, *args, ispin=0, iorb=None, fmpi=True):
        
         
       :type args: [np.array(dtype=complex,np.array(dtype=complex), \
-      np.array(dtype=float)]**or** [np.array(dtype=complex, \
+      np.array(dtype=float)] or [np.array(dtype=complex, \
       np.array(dtype=float)]
       :param args: The positional arguments are the function(s) \
       to fit and the bath array. 
