@@ -318,20 +318,20 @@ global_env.get_bath_type = types.MethodType(get_bath_type, global_env)
 global_env.get_ed_mode = types.MethodType(get_ed_mode, global_env)
 
 # parse umatrix (newer EDIpack)
-#try:
-from . import func_parse_umatrix
+try:
+    from . import func_parse_umatrix
 
-global_env.inspect_uparams = types.MethodType(
-    func_parse_umatrix.inspect_uparams, global_env
-)
-global_env.reset_umatrix = types.MethodType(
-    func_parse_umatrix.reset_umatrix, global_env
-)
-global_env.add_twobody_operator = types.MethodType(
-    func_parse_umatrix.add_twobody_operator, global_env
-)
-#except Exception:
-#    pass
+    global_env.inspect_uparams = types.MethodType(
+        func_parse_umatrix.inspect_uparams, global_env
+    )
+    global_env.reset_umatrix = types.MethodType(
+        func_parse_umatrix.reset_umatrix, global_env
+    )
+    global_env.add_twobody_operator = types.MethodType(
+        func_parse_umatrix.add_twobody_operator, global_env
+    )
+except Exception:
+    pass
 
 # read_input
 from . import func_read_input
