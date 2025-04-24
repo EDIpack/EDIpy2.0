@@ -40,6 +40,19 @@ class Link:
 def add_global_variable(obj, dynamic_name, target_object, target_attribute):
     @property
     def getter(self):
+        if dynamic_name in [
+            "Uloc",
+            "Ust",
+            "Jh",
+            "Jx",
+            "Jp",
+        ]:  # There are special
+            # If edipack is new, we can call a bespoke function to update them
+            try:
+                attrib = obj.inspect_uparams(dynamic_name)
+                return attrib
+            except Exception:  # Otherwise we will default to the old behavior
+                pass
         try:
             attrib = getattr(target_object, target_attribute)
             try:  # this is for strings
@@ -53,10 +66,16 @@ def add_global_variable(obj, dynamic_name, target_object, target_attribute):
 
     @getter.setter
     def setter(self, new_value):
+        if dynamic_name in ["Uloc", "Ust", "Jh", "Jx", "Jp"]:
+            try:
+                attrib = obj.inspect_uparams(dynamic_name, new_value)
+                return
+            except Exception:
+                pass
         try:  # this is for arrays
             if len(target_object) > 1:
                 if np.isscalar(new_value):
-                    new_value=[new_value]
+                    new_value = [new_value]
                 minlength = min(len(target_object), len(new_value))
                 target_object[0:minlength] = new_value[0:minlength]
         except Exception:
@@ -126,14 +145,14 @@ system = sys.platform
 libext = ".dylib" if system == "darwin" else ".so"
 pathlist = []
 
-#1st try: use custom env variable
+# 1st try: use custom env variable
 try:
     pathlist += os.environ["EDIPACK_PATH"].split(os.pathsep)
 except Exception:
     pass
 
 # 2nd try: use pkgconfig directly
-if  pkgconfig.exists("edipack2"):
+if pkgconfig.exists("edipack2"):
     pathlist += [pkgconfig.variables("edipack2_cbinding")["libdir"]]
 
 # 3rd try: check PKG_CONFIG_PATH
@@ -148,7 +167,7 @@ else:
         )
     if pkgconfig.exists("edipack2"):
         pathlist += [pkgconfig.variables("edipack2_cbinding")["libdir"]]
-        
+
 # 4th try: look in standard environment variables
 try:
     pathlist += os.environ["LD_LIBRARY_PATH"].split(os.pathsep)
@@ -172,8 +191,7 @@ for ipath in pathlist:
         error_message.append(str(e))
 else:
     print("Library loading failed. List of error messages:")
-    print(*error_message, sep='\n')
-    
+    print(*error_message, sep="\n")
 
 
 ####################################################################
@@ -298,6 +316,16 @@ except Exception:
 # from here
 global_env.get_bath_type = types.MethodType(get_bath_type, global_env)
 global_env.get_ed_mode = types.MethodType(get_ed_mode, global_env)
+
+# parse uparams (newer EDIpack)
+try:
+    from . import func_parse_uparams
+
+    global_env.inspect_uparams = types.MethodType(
+        func_parse_uparams.inspect_uparams, global_env
+    )
+except Exception:
+    pass
 
 # read_input
 from . import func_read_input

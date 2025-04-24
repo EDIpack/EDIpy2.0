@@ -358,9 +358,7 @@ def break_symmetry_bath(self, bath, field, sign, save=True):
     else:
         if self.has_ineq:
             sign = sign * np.ones(bath_shape[0], order="F")
-            break_symmetry_bath_ineq(
-                bath, bath_shape, field, sign, save_int
-            )
+            break_symmetry_bath_ineq(bath, bath_shape, field, sign, save_int)
         else:
             raise RuntimeError(
                 "Can't use r-DMFT routines without installing edipack2ineq"
