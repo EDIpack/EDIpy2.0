@@ -31,10 +31,7 @@ The exposed global variables can be accessed as properties of the :class:`edipy2
 
    Value of the Hund's coupling
    
-   Accesses :f:var:`jh` if this is initialized. Otherwise,
-   accesses the input variable :f:var:`jh`. In both cases, if a scalar is provided
-   every inter-orbital interaction term is set to that value. If :f:var:`jh_internal` 
-   is allocated and a [:f:var:`norb`, :f:var:`norb`] matrix can be passed as well.
+   Accesses :f:var:`jh`. Only relevant if :f:var:`ed_use_kanamori` = :code:`T`
    
    :type: float
    :default: 0.0
@@ -79,10 +76,7 @@ The exposed global variables can be accessed as properties of the :class:`edipy2
 
    Value of the spin exchange coupling
    
-   Accesses :f:var:`jx_internal` if this is initialized. Otherwise,
-   accesses the input variable :f:var:`jx`. In both cases, if a scalar is provided
-   every inter-orbital interaction term is set to that value. If :f:var:`jx_internal` 
-   is allocated and a [:f:var:`norb`, :f:var:`norb`] matrix can be passed as well.
+   Accesses :f:var:`jx`. Only relevant if :f:var:`ed_use_kanamori` = :code:`T`
    
    :type: float
    :default: 0.0
@@ -91,10 +85,7 @@ The exposed global variables can be accessed as properties of the :class:`edipy2
 
    Value of the pair hopping coupling
    
-   Accesses :f:var:`jp_internal` if this is initialized. Otherwise,
-   accesses the input variable :f:var:`jp`. In both cases, if a scalar is provided
-   every inter-orbital interaction term is set to that value. If :f:var:`jp_internal` 
-   is allocated and a [:f:var:`norb`, :f:var:`norb`] matrix can be passed as well.
+   Accesses :f:var:`jp`. Only relevant if :f:var:`ed_use_kanamori` = :code:`T`
    
    :type: float
    :default: 0.0
@@ -225,8 +216,7 @@ The exposed global variables can be accessed as properties of the :class:`edipy2
    Values of the local interaction per orbital. 
    If less values are provided, the array is filled/updated in increasing order
    
-   Accesses :f:var:`uloc_internal` if this is initialized. Otherwise,
-   accesses the input variable :f:var:`uloc`
+   Accesses :f:var:`uloc`. Only relevant if :f:var:`ed_use_kanamori` = :code:`T`
    
    :type: float
    :default: [2.0, 0.0, 0.0, 0.0, 0.0]
@@ -235,10 +225,7 @@ The exposed global variables can be accessed as properties of the :class:`edipy2
 
    Value of the inter-orbital interaction term.
    
-   Accesses :f:var:`ust_internal` if this is initialized. Otherwise,
-   accesses the input variable :f:var:`ust`. In both cases, if a scalar is provided
-   every inter-orbital interaction term is set to that value. If :f:var:`ust_internal` 
-   is allocated and a [:f:var:`norb`, :f:var:`norb`] matrix can be passed as well.
+   Accesses :f:var:`ust`. Only relevant if :f:var:`ed_use_kanamori` = :code:`T`
    
    :type: float
    :default: 0.0

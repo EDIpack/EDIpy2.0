@@ -40,19 +40,6 @@ class Link:
 def add_global_variable(obj, dynamic_name, target_object, target_attribute):
     @property
     def getter(self):
-        if dynamic_name in [
-            "Uloc",
-            "Ust",
-            "Jh",
-            "Jx",
-            "Jp",
-        ]:  # There are special
-            # If edipack is new, we can call a bespoke function to update them
-            try:
-                attrib = obj.inspect_uparams(dynamic_name)
-                return attrib
-            except Exception:  # Otherwise we will default to the old behavior
-                pass
         try:
             attrib = getattr(target_object, target_attribute)
             try:  # this is for strings
@@ -66,12 +53,6 @@ def add_global_variable(obj, dynamic_name, target_object, target_attribute):
 
     @getter.setter
     def setter(self, new_value):
-        if dynamic_name in ["Uloc", "Ust", "Jh", "Jx", "Jp"]:
-            try:
-                attrib = obj.inspect_uparams(dynamic_name, new_value)
-                return
-            except Exception:
-                pass
         try:  # this is for arrays
             if len(target_object) > 1:
                 if np.isscalar(new_value):
@@ -321,9 +302,6 @@ global_env.get_ed_mode = types.MethodType(get_ed_mode, global_env)
 try:
     from . import func_parse_umatrix
 
-    global_env.inspect_uparams = types.MethodType(
-        func_parse_umatrix.inspect_uparams, global_env
-    )
     global_env.reset_umatrix = types.MethodType(
         func_parse_umatrix.reset_umatrix, global_env
     )
