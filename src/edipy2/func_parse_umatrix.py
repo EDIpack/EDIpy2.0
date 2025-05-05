@@ -52,7 +52,7 @@ def add_twobody_operator(self, oi, si, oj, sj, ok, sk, ol, sl, Uijkl):
     :param sl: spin index of :math:`c_{l}`
 
     :type float: Uijkl
-    :param orbvector: interaction coefficient
+    :param Uijkl: interaction coefficient
 
     """
 
