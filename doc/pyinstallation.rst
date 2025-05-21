@@ -1,39 +1,39 @@
-.. _edipy_install:
+.. _edipack2py_install:
 
-EDIpy2 Install
-==============
+EDIpack2py Installation
+========================
 
 
 Anaconda
 ------------
 
-We provide Linux and MacOS packages for the `Anaconda <https://www.anaconda.com/>`_ distribution. Packages are available for Python version 3.10 and later. The `EDIpack2.0` package contains the `edipy2` python module as well as the `EDIpack2.0 <https://www.github.com/EDIpack/EDIpack2.0/>`_ and `SciFortran <https://www.github.com/scifortran/scifortran/>`_ libraries.
-Once a command-line tool such as `conda <https://www.anaconda.com/>`_ or `mamba <https://mamba.readthedocs.io/en/latest/>`_ is installed, an environment using one of the available python version can be created, and then the EDIpack2.0 package can be installed:
+We provide Linux and MacOS packages for the `Anaconda <https://www.anaconda.com/>`_ distribution. Packages are available for Python version 3.10 and later. The `EDIpack` package contains the `edipack2py` python module as well as the `EDIpack <https://www.github.com/EDIpack/EDIpack/>`_ and `SciFortran <https://www.github.com/scifortran/scifortran/>`_ libraries.
+Once a command-line tool such as `conda <https://www.anaconda.com/>`_ or `mamba <https://mamba.readthedocs.io/en/latest/>`_ is installed, an environment using one of the available python version can be created, and then the EDIpack package can be installed:
 
 .. code-block:: shell
 
    conda create -n edipack
    conda activate edipack
-   conda install -c conda-forge -c edipack edipack2
+   conda install -c conda-forge -c edipack edipack
 
 
-the `edipy2` python module can then be directly imported.
+the `edipack2py` python module can then be directly imported.
 
 
 Install with pip
 ---------------------
 
-See the package page on `pypi <https://pypi.org/project/edipy2/>`_ .
+See the package page on `pypi <https://pypi.org/project/edipack2py/>`_ .
 
 
 Install from source
 ---------------------
 
-The python module `edipy2` requires the
+The python module `edipack2py` requires the
 
 * `SciFortran`_
 
-* `EDIpack2.0`_
+* `EDIpack`_
 
 libraries to be installed beforehand, please see related documentation
 to install such Fortran libraries. Once both are set up, the python module can be installed from the root repository folder via
@@ -42,7 +42,7 @@ to install such Fortran libraries. Once both are set up, the python module can b
 
    pip install . --break-system-packages
    
-The latter option may not be required in all cases, but it is in recent versions of Debian and OSX. Since no edipy2 package is provided by any distro, this will not create problems. If the user is using a virtual environment, the option is not necessary.
+The latter option may not be required in all cases, but it is in recent versions of Debian and OSX. Since EDIpack2py is currently not packaged by any distro, this will not create problems. If the user is using a virtual environment, the option is not necessary.
 
 
 

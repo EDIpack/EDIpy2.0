@@ -1,16 +1,16 @@
 Global variables
 =================
 
-These are global variables of the :code:`edipy2` module. They form a subset of the global variables of the EDIpack2 library. 
+These are global variables of the :code:`edipack2py` module. They form a subset of the global variables of the EDIpack library. 
 Along with all the other global variables, they can be set in the input file, 
-and are read when calling the :func:`edipy2.global_env.read_input` function.
+and are read when calling the :func:`edipack2py.global_env.read_input` function.
 
-The exposed global variables can be accessed as properties of the :class:`edipy2.global_env` class.
+The exposed global variables can be accessed as properties of the :class:`edipack2py.global_env` class.
 
 .. code-block:: python
 
     import numpy as np
-    from edipy2 import global_env as ed
+    from edipack2py import global_env as ed
    
     ed.Nspin = 1            # set a global variable
     mylocalvar = ed.Nspin   # assing to a local variable (the value of mylocalvar will not change if ed.Nspin changes)
@@ -18,7 +18,7 @@ The exposed global variables can be accessed as properties of the :class:`edipy2
     np.arange(ed.Nspin)
 
 
-.. data:: edipy2.global_env.beta
+.. data:: edipack2py.global_env.beta
 
    Value of the inverse temperature, at T=0 is used as a IR cut-off
    
@@ -27,7 +27,7 @@ The exposed global variables can be accessed as properties of the :class:`edipy2
    :type: float
    :default: 1000.0
 
-.. data:: edipy2.global_env.Jh
+.. data:: edipack2py.global_env.Jh
 
    Value of the Hund's coupling
    
@@ -36,7 +36,7 @@ The exposed global variables can be accessed as properties of the :class:`edipy2
    :type: float
    :default: 0.0
    
-.. data:: edipy2.global_env.dmft_error
+.. data:: edipack2py.global_env.dmft_error
 
    Error threshold for DMFT convergence
    
@@ -45,7 +45,7 @@ The exposed global variables can be accessed as properties of the :class:`edipy2
    :type: float
    :default: 1e-05
    
-.. data:: edipy2.global_env.ed_total_ud
+.. data:: edipack2py.global_env.ed_total_ud
 
    Flag to select which type of quantum numbers have to be considered: T (default) total Nup-Ndw, F orbital based Nup-Ndw.
    
@@ -54,7 +54,7 @@ The exposed global variables can be accessed as properties of the :class:`edipy2
    :type: bool
    :default: True
    
-.. data:: edipy2.global_env.ed_twin
+.. data:: edipack2py.global_env.ed_twin
 
    Flag to reduce (T) or not (F,default) the number of visited sector using twin symmetry
    
@@ -63,7 +63,7 @@ The exposed global variables can be accessed as properties of the :class:`edipy2
    :type: bool
    :default: False
    
-.. data:: edipy2.global_env.eps
+.. data:: edipack2py.global_env.eps
 
    Broadening on the real-axis
    
@@ -72,7 +72,7 @@ The exposed global variables can be accessed as properties of the :class:`edipy2
    :type: float
    :default: 1e-02
 
-.. data:: edipy2.global_env.Jx
+.. data:: edipack2py.global_env.Jx
 
    Value of the spin exchange coupling
    
@@ -81,7 +81,7 @@ The exposed global variables can be accessed as properties of the :class:`edipy2
    :type: float
    :default: 0.0
 
-.. data:: edipy2.global_env.Jp
+.. data:: edipack2py.global_env.Jp
 
    Value of the pair hopping coupling
    
@@ -90,7 +90,7 @@ The exposed global variables can be accessed as properties of the :class:`edipy2
    :type: float
    :default: 0.0
    
-.. data:: edipy2.global_env.Lmats
+.. data:: edipack2py.global_env.Lmats
 
    Number of frequencies, Matsubara axis
    
@@ -99,7 +99,7 @@ The exposed global variables can be accessed as properties of the :class:`edipy2
    :type: int
    :default: 4096
   
-.. data:: edipy2.global_env.LOGfile
+.. data:: edipack2py.global_env.LOGfile
 
    Log unit
    
@@ -108,7 +108,7 @@ The exposed global variables can be accessed as properties of the :class:`edipy2
    :type: int
    :default: 6
    
-.. data:: edipy2.global_env.Lpos
+.. data:: edipack2py.global_env.Lpos
 
    Number of points for the lattice PDF
    
@@ -117,7 +117,7 @@ The exposed global variables can be accessed as properties of the :class:`edipy2
    :type: int
    :default: 100
   
-.. data:: edipy2.global_env.Lreal
+.. data:: edipack2py.global_env.Lreal
 
    Number of frequencies, real axis
    
@@ -126,7 +126,7 @@ The exposed global variables can be accessed as properties of the :class:`edipy2
    :type: int
    :default: 5000
 
-.. data:: edipy2.global_env.Ltau
+.. data:: edipack2py.global_env.Ltau
 
    Number of imaginary time points
    
@@ -135,7 +135,7 @@ The exposed global variables can be accessed as properties of the :class:`edipy2
    :type: int
    :default: 1024
 
-.. data:: edipy2.global_env.Nbath
+.. data:: edipack2py.global_env.Nbath
 
    Number of bath levels. See the specifics of the bath geometries
    
@@ -144,7 +144,7 @@ The exposed global variables can be accessed as properties of the :class:`edipy2
    :type: int
    :default: 6
    
-.. data:: edipy2.global_env.Nloop
+.. data:: edipack2py.global_env.Nloop
 
    Maximum number of DMFT loops
    
@@ -153,7 +153,7 @@ The exposed global variables can be accessed as properties of the :class:`edipy2
    :type: int
    :default: 100
 
-.. data:: edipy2.global_env.Norb
+.. data:: edipack2py.global_env.Norb
 
    Number of correlated orbitals. Maximum 5 orbitals are supported
    
@@ -162,7 +162,7 @@ The exposed global variables can be accessed as properties of the :class:`edipy2
    :type: int
    :default: 1
 
-.. data:: edipy2.global_env.Nph
+.. data:: edipack2py.global_env.Nph
 
    Max number of phonons allowed (cut off)
    
@@ -171,7 +171,7 @@ The exposed global variables can be accessed as properties of the :class:`edipy2
    :type: int
    :default: 0
    
-.. data:: edipy2.global_env.nread
+.. data:: edipack2py.global_env.nread
 
    Value of the target density for fixed density calculations. If valued 0, it is discarded.
    
@@ -180,7 +180,7 @@ The exposed global variables can be accessed as properties of the :class:`edipy2
    :type: float
    :default: 0.0
 
-.. data:: edipy2.global_env.Nspin
+.. data:: edipack2py.global_env.Nspin
 
    Number of explicitly defined spin degrees of freedom. If Nspin=1, the two spin block 
    of the Hamiltonian, Green's function, self-energy and so on are assumed equal.
@@ -192,7 +192,7 @@ The exposed global variables can be accessed as properties of the :class:`edipy2
    :type: int
    :default: 1
    
-.. data:: edipy2.global_env.Nsuccess
+.. data:: edipack2py.global_env.Nsuccess
 
    Number of successive iterations below threshold for convergence
    
@@ -201,7 +201,7 @@ The exposed global variables can be accessed as properties of the :class:`edipy2
    :type: int
    :default: 1
    
-.. data:: edipy2.global_env.sb_field
+.. data:: edipack2py.global_env.sb_field
 
    Value of a symmetry breaking field for magnetic solutions
    
@@ -211,7 +211,7 @@ The exposed global variables can be accessed as properties of the :class:`edipy2
    :default: 0.1
 
 
-.. data:: edipy2.global_env.Uloc
+.. data:: edipack2py.global_env.Uloc
 
    Values of the local interaction per orbital. 
    If less values are provided, the array is filled/updated in increasing order
@@ -221,7 +221,7 @@ The exposed global variables can be accessed as properties of the :class:`edipy2
    :type: float
    :default: [2.0, 0.0, 0.0, 0.0, 0.0]
    
-.. data:: edipy2.global_env.Ust
+.. data:: edipack2py.global_env.Ust
 
    Value of the inter-orbital interaction term.
    
@@ -230,7 +230,7 @@ The exposed global variables can be accessed as properties of the :class:`edipy2
    :type: float
    :default: 0.0
    
-.. data:: edipy2.global_env.wini
+.. data:: edipack2py.global_env.wini
 
    Value of the smallest real-axis frequency
    
@@ -239,7 +239,7 @@ The exposed global variables can be accessed as properties of the :class:`edipy2
    :type: float
    :default: -5.0
    
-.. data:: edipy2.global_env.wfin
+.. data:: edipack2py.global_env.wfin
 
    Value of the largest real-axis frequency
    
@@ -248,7 +248,7 @@ The exposed global variables can be accessed as properties of the :class:`edipy2
    :type: float
    :default: -5.0
    
-.. data:: edipy2.global_env.xmin
+.. data:: edipack2py.global_env.xmin
 
    Value for the smallest position for the lattice PDF
    
@@ -257,7 +257,7 @@ The exposed global variables can be accessed as properties of the :class:`edipy2
    :type: float
    :default: -3.0
 
-.. data:: edipy2.global_env.xmax
+.. data:: edipack2py.global_env.xmax
 
    Value for the largest position for the lattice PDF
    
@@ -267,7 +267,7 @@ The exposed global variables can be accessed as properties of the :class:`edipy2
    :default: 3.0
 
    
-.. data:: edipy2.global_env.xmu
+.. data:: edipack2py.global_env.xmu
 
    Value of the chemical potential. If :f:var:`hfmode` = :code:`T`, :f:var:`xmu` = :code:`0` satisfies the half-filling condition
    

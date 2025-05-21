@@ -25,14 +25,14 @@ import sphinxfortran_ng
 
 # -- Project information -----------------------------------------------------
 
-project = u'EDIpy2.0'
+project = u'EDIpack2py'
 copyright = u'2025, Lorenzo Crippa and Adriano Amaricci'
 author = u'Lorenzo Crippa and Adriano Amaricci'
 
 # The short X.Y version
 version = u''
 # The full version, including alpha/beta/rc tags
-release = u'4.0.0'
+release = u'5.0.0'
 
 
 # -- General configuration ---------------------------------------------------
@@ -70,7 +70,7 @@ intersphinx_mapping = {
     'python': ('https://docs.python.org/3', None),
     'numpy': ('https://numpy.org/doc/stable/', None),
     'scifor': ('https://scifortran.github.io/SciFortran/', None),
-    'edipack2': ('https://edipack.github.io/EDIpack2.0/', None),
+    'edipack': ('https://edipack.github.io/EDIpack/', None),
 }
 
 # Enable auto-generation of ToC
@@ -204,7 +204,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'EDIpy2.tex', u'EDIpy2.0 documentation',
+    (master_doc, 'EDIpack2py.tex', u'EDIpack2py documentation',
      u'io', 'manual'),
 ]
 
@@ -214,7 +214,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'EDIpy2', u'EDIpy2 documentation',
+    (master_doc, 'EDIpack2py', u'EDIpack2py documentation',
      [author], 1)
 ]
 
@@ -225,8 +225,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'EDIpy2', u'EDIpy2 documentation',
-     author, 'EDIpy2', 'One line description of project.',
+    (master_doc, 'EDIpack2py', u'EDIpack2py documentation',
+     author, 'EDIpack2py', 'One line description of project.',
      'Miscellaneous'),
 ]
 

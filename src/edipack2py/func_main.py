@@ -59,7 +59,7 @@ def init_solver(self, bath=None, Nb=None, Nlat=None):
                 bath = np.zeros((Nlat, Nb), dtype="float", order="F")
             else:
                 raise RuntimeError(
-                    "Can't use r-DMFT routines without installing edipack2ineq"
+                    "Can't use r-DMFT routines without installing EDIpack2ineq"
                 )
         elif Nb is not None and Nlat is None:
             bath = np.zeros(Nb, dtype="float", order="F")
@@ -68,7 +68,7 @@ def init_solver(self, bath=None, Nb=None, Nlat=None):
                 bath = np.zeros((Nlat, Nb), dtype="float", order="F")
             else:
                 raise RuntimeError(
-                    "Can't use r-DMFT routines without installing edipack2ineq"
+                    "Can't use r-DMFT routines without installing EDIpack2ineq"
                 )
     else:
         if Nb is not None or Nlat is not None:
@@ -104,7 +104,7 @@ def init_solver(self, bath=None, Nb=None, Nlat=None):
             self.Nineq = np.shape(bath)[0]  # save number of inequivalent sites
         else:
             raise RuntimeError(
-                "Can't use r-DMFT routines without installing edipack2ineq"
+                "Can't use r-DMFT routines without installing EDIpack2ineq"
             )
 
     return bath
@@ -119,7 +119,7 @@ def solve(self, bath, flag_gf=True, flag_mpi=True, mpi_lanc=False):
        :type bath: np.array(dtype=float) 
        :param bath: The bath array returned by  :func:`init_solver`. \
        If the bath dimensions are inconsistent with the global properties \
-       of the problem, EDIpack2 will exit with an error.
+       of the problem, EDIpack will exit with an error.
        
        :type flag_gf: bool
        :param flag_gf: for single-impurity DMFT, if :code:`False`, it disables \
@@ -173,7 +173,7 @@ def solve(self, bath, flag_gf=True, flag_mpi=True, mpi_lanc=False):
             solve_ineq(bath, dim_bath, flag_gf, mpi_lanc)
         else:
             raise RuntimeError(
-                "Can't use r-DMFT routines without installing edipack2ineq"
+                "Can't use r-DMFT routines without installing EDIpack2ineq"
             )
 
 

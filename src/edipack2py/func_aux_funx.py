@@ -27,13 +27,13 @@ def set_hloc(self, hloc, Nlat=None):
 
      The array is ordered in F convention inside the function.
 
-     **Note**: the way the EDIpack2 library passes from 1 comulative to 2 or 3 \
+     **Note**: the way the EDIpack library passes from 1 comulative to 2 or 3 \
                running indices is, from slower to faster: ``lat``, ``spin``, ``orb``
 
     :type Nlat: int
     :param Nlat: Number of inequivalent sites for real-space DMFT. The function \
      will raise a ValueError if the dimensions of ``hloc`` are inconsistent with \
-     the presence or absence of Nlat. The EDIpack2 library will check the \
+     the presence or absence of Nlat. The EDIpack library will check the \
      correctness of the dimensions of ``hloc`` and terminate execution if inconsistent.
 
     :raise ValueError: If hloc is not provided or has the wrong shape
@@ -97,7 +97,7 @@ def set_hloc(self, hloc, Nlat=None):
         dim_hloc = np.asarray(np.shape(hloc), dtype=np.int64, order="F")
         self.dim_hloc = len(dim_hloc)
     except Exception:
-        raise ValueError("In Edipack2.0, set_Hloc needs an Hloc defined")
+        raise ValueError("In Edipack, set_Hloc needs an Hloc defined")
 
     if Nlat is not None:
         if self.has_ineq:
@@ -113,7 +113,7 @@ def set_hloc(self, hloc, Nlat=None):
                 )
         else:
             raise RuntimeError(
-                "Can't use r-DMFT routines without installing edipack2ineq"
+                "Can't use r-DMFT routines without installing EDIpack2ineq"
             )
     else:
         if len(dim_hloc) == 2:

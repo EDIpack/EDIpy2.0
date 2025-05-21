@@ -1,7 +1,7 @@
 Input file manipulation
 ========================
 
-.. autofunction:: edipy2.global_env.read_input
+.. autofunction:: edipack2py.global_env.read_input
 
 
 

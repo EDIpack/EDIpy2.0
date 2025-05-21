@@ -1,9 +1,9 @@
 Interaction matrix parsing
 ===========================
 
-.. autofunction:: edipy2.global_env.add_twobody_operator
+.. autofunction:: edipack2py.global_env.add_twobody_operator
 
-.. autofunction:: edipy2.global_env.reset_umatrix
+.. autofunction:: edipack2py.global_env.reset_umatrix
 
 
 

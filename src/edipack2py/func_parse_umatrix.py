@@ -25,7 +25,7 @@ def add_twobody_operator(self, oi, si, oj, sj, ok, sk, ol, sl, Uijkl):
     The input parameters are the spin and orbital indices of the second
     quantized operators and the interaction coefficient.
     The order of the indices is consistent with those of the umatrix file
-    (see :ref:`EDIpack2.0 documentation <edipack2:parse_umatrix>`).
+    (see :ref:`EDIpack documentation <edipack:parse_umatrix>`).
 
     :type oi: int
     :param oi: orbital index of :math:`c^{\dagger}_{i}`

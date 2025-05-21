@@ -68,7 +68,7 @@ def get_dens(self, ilat=None, iorb=None):
                 return densvec
         else:
             raise RuntimeError(
-                "Can't use r-DMFT routines without installing edipack2ineq"
+                "Can't use r-DMFT routines without installing EDIpack2ineq"
             )
 
 
@@ -162,7 +162,7 @@ def get_mag(self, icomp=None, ilat=None, iorb=None):
                     return magvec
         else:
             raise RuntimeError(
-                "Can't use r-DMFT routines without installing edipack2ineq"
+                "Can't use r-DMFT routines without installing EDIpack2ineq"
             )
 
 
@@ -227,7 +227,7 @@ def get_docc(self, ilat=None, iorb=None):
                 return doccvec
         else:
             raise RuntimeError(
-                "Can't use r-DMFT routines without installing edipack2ineq"
+                "Can't use r-DMFT routines without installing EDIpack2ineq"
             )
 
 
@@ -316,7 +316,7 @@ def get_phi(self, ilat=None, iorb=None, jorb=None):
                     return phivec
         else:
             raise RuntimeError(
-                "Can't use r-DMFT routines without installing edipack2ineq"
+                "Can't use r-DMFT routines without installing EDIpack2ineq"
             )
 
 
@@ -381,7 +381,7 @@ def get_eimp(self, ilat=None, ikind=None):
                 return eimp_vec
         else:
             raise RuntimeError(
-                "Can't use r-DMFT routines without installing edipack2ineq"
+                "Can't use r-DMFT routines without installing EDIpack2ineq"
             )
 
 
@@ -650,7 +650,7 @@ def get_sigma(self, ilat=None, ishape=None, axis="m", typ="n", zeta=None):
                 return Sigma
         else:
             raise RuntimeError(
-                "Can't use r-DMFT routines without installing edipack2ineq"
+                "Can't use r-DMFT routines without installing EDIpack2ineq"
             )
 
 
@@ -921,7 +921,7 @@ def get_gimp(self, ilat=None, ishape=None, axis="m", typ="n", zeta=None):
                 return gimp
         else:
             raise RuntimeError(
-                "Can't use r-DMFT routines without installing edipack2ineq"
+                "Can't use r-DMFT routines without installing EDIpack2ineq"
             )
 
 
@@ -1322,7 +1322,7 @@ def get_chi(self, chan="spin", zeta=None, axis=None, ilat=None):
             latticeflag = 1
         else:
             raise RuntimeError(
-                "Can't use r-DMFT routines without installing edipack2ineq"
+                "Can't use r-DMFT routines without installing EDIpack2ineq"
             )
 
     aux_norb = c_int.in_dll(self.library, "Norb").value

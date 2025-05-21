@@ -1,6 +1,6 @@
 import numpy as np
 import scipy as sp
-from edipy2 import global_env as ed
+from edipack2py import global_env as ed
 import mpi4py
 from mpi4py import MPI
 import os,sys

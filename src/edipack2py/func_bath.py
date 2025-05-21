@@ -131,7 +131,7 @@ def set_hreplica(self, hvec, lambdavec):
                 )
             else:
                 raise RuntimeError(
-                    "Can't use r-DMFT routines without installing edipack2ineq"
+                    "Can't use r-DMFT routines without installing EDIpack2ineq"
                 )
         else:
             raise ValueError("Shape(lambdavec) != 2 or 3  in set_Hreplica")
@@ -147,7 +147,7 @@ def set_hreplica(self, hvec, lambdavec):
                 )
             else:
                 raise RuntimeError(
-                    "Can't use r-DMFT routines without installing edipack2ineq"
+                    "Can't use r-DMFT routines without installing EDIpack2ineq"
                 )
         else:
             raise ValueError("Shape(lambdavec) != 2 or 3  in set_Hreplica")
@@ -269,7 +269,7 @@ def set_hgeneral(self, hvec, lambdavec):
                 )
             else:
                 raise RuntimeError(
-                    "Can't use r-DMFT routines without installing edipack2ineq"
+                    "Can't use r-DMFT routines without installing EDIpack2ineq"
                 )
         else:
             raise ValueError("Shape(lambdavec) != 2 or 3  in set_Hgeneral")
@@ -285,7 +285,7 @@ def set_hgeneral(self, hvec, lambdavec):
                 )
             else:
                 raise RuntimeError(
-                    "Can't use r-DMFT routines without installing edipack2ineq"
+                    "Can't use r-DMFT routines without installing EDIpack2ineq"
                 )
         else:
             raise ValueError("Shape(lambdavec) != 2 or 3  in set_Hgeneral")
@@ -361,7 +361,7 @@ def break_symmetry_bath(self, bath, field, sign, save=True):
             break_symmetry_bath_ineq(bath, bath_shape, field, sign, save_int)
         else:
             raise RuntimeError(
-                "Can't use r-DMFT routines without installing edipack2ineq"
+                "Can't use r-DMFT routines without installing EDIpack2ineq"
             )
     return bath
 
@@ -413,7 +413,7 @@ def spin_symmetrize_bath(self, bath, save=True):
             spin_symmetrize_bath_ineq(bath, bath_shape, save_int)
         else:
             raise RuntimeError(
-                "Can't use r-DMFT routines without installing edipack2ineq"
+                "Can't use r-DMFT routines without installing EDIpack2ineq"
             )
     return bath
 
@@ -475,7 +475,7 @@ def orb_symmetrize_bath(self, bath, orb1, orb2, save=True):
             )
         else:
             raise RuntimeError(
-                "Can't use r-DMFT routines without installing edipack2ineq"
+                "Can't use r-DMFT routines without installing EDIpack2ineq"
             )
     return bath
 
@@ -542,7 +542,7 @@ def orb_equality_bath(self, bath, indx, save=True):
                 orb_equality_bath_ineq(bath, bath_shape, indx, save_int)
             else:
                 raise RuntimeError(
-                    "Can't use r-DMFT routines without installing edipack2ineq"
+                    "Can't use r-DMFT routines without installing EDIpack2ineq"
                 )
     return bath
 
@@ -591,7 +591,7 @@ def ph_symmetrize_bath(self, bath, save):
             ph_symmetrize_bath_ineq(bath, bath_shape, save_int)
         else:
             raise RuntimeError(
-                "Can't use r-DMFT routines without installing edipack2ineq"
+                "Can't use r-DMFT routines without installing EDIpack2ineq"
             )
     return bath
 
@@ -632,7 +632,7 @@ def save_array_as_bath(self, bath):
             save_array_as_bath_ineq(bath, bath_shape)
         else:
             raise RuntimeError(
-                "Can't use r-DMFT routines without installing edipack2ineq"
+                "Can't use r-DMFT routines without installing EDIpack2ineq"
             )
     return
 

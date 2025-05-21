@@ -314,7 +314,7 @@ def chi2_fitgf(self, *args, ispin=0, iorb=None, fmpi=True):
                     raise ValueError("chi_fitgf_normal: takes dim(g) = 3 or 5")
             else:
                 raise RuntimeError(
-                    "Can't use r-DMFT routines without installing edipack2ineq"
+                    "Can't use r-DMFT routines without installing EDIpack2ineq"
                 )
         else:
             raise ValueError("chi_fitgf_normal: takes dim(bath) = 1 or 2")
@@ -357,7 +357,7 @@ def chi2_fitgf(self, *args, ispin=0, iorb=None, fmpi=True):
                     )
             else:
                 raise RuntimeError(
-                    "Can't use r-DMFT routines without installing edipack2ineq"
+                    "Can't use r-DMFT routines without installing EDIpack2ineq"
                 )
         else:
             raise ValueError("chi_fitgf_superc: takes dim(bath) = 1 or 2")

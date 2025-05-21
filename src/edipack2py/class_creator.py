@@ -124,6 +124,7 @@ custompath = []
 default_pc_dir = ".pkgconfig.d"
 system = sys.platform
 libext = ".dylib" if system == "darwin" else ".so"
+libname = "edipack_cbindings"
 pathlist = []
 
 # 1st try: use custom env variable
@@ -133,8 +134,8 @@ except Exception:
     pass
 
 # 2nd try: use pkgconfig directly
-if pkgconfig.exists("edipack2"):
-    pathlist += [pkgconfig.variables("edipack2_cbinding")["libdir"]]
+if pkgconfig.exists("edipack"):
+    pathlist += [pkgconfig.variables(libname)["libdir"]]
 
 # 3rd try: check PKG_CONFIG_PATH
 else:
@@ -146,8 +147,8 @@ else:
         os.environ["PKG_CONFIG_PATH"] = os.path.join(
             Path.home(), default_pc_dir
         )
-    if pkgconfig.exists("edipack2"):
-        pathlist += [pkgconfig.variables("edipack2_cbinding")["libdir"]]
+    if pkgconfig.exists("edipack"):
+        pathlist += [pkgconfig.variables(libname)["libdir"]]
 
 # 4th try: look in standard environment variables
 try:
@@ -160,13 +161,13 @@ except Exception:
     pass
 
 # try loading the library
-libedi2py = None
+dynamic_library = None
 error_message = []
 
 for ipath in pathlist:
     try:
-        libfile = os.path.join(ipath, "libedipack2_cbinding" + libext)
-        libedi2py = CDLL(libfile)
+        libfile = os.path.join(ipath, "lib" + libname + libext)
+        dynamic_library = CDLL(libfile)
         break
     except Exception as e:
         error_message.append(str(e))
@@ -179,7 +180,7 @@ else:
 # Create the global_env class (this is what the python module sees)
 ####################################################################
 
-global_env = Link(libedi2py)
+global_env = Link(dynamic_library)
 
 ######################################
 # GLOBAL VARIABLES
@@ -187,106 +188,106 @@ global_env = Link(libedi2py)
 
 try:
     add_global_variable(
-        global_env, "Nbath", c_int.in_dll(libedi2py, "Nbath"), "value"
+        global_env, "Nbath", c_int.in_dll(dynamic_library, "Nbath"), "value"
     )
     add_global_variable(
-        global_env, "Norb", c_int.in_dll(libedi2py, "Norb"), "value"
+        global_env, "Norb", c_int.in_dll(dynamic_library, "Norb"), "value"
     )
     add_global_variable(
-        global_env, "Nspin", c_int.in_dll(libedi2py, "Nspin"), "value"
+        global_env, "Nspin", c_int.in_dll(dynamic_library, "Nspin"), "value"
     )
     add_global_variable(
-        global_env, "Nloop", c_int.in_dll(libedi2py, "Nloop"), "value"
+        global_env, "Nloop", c_int.in_dll(dynamic_library, "Nloop"), "value"
     )
     add_global_variable(
-        global_env, "Nph", c_int.in_dll(libedi2py, "Nph"), "value"
+        global_env, "Nph", c_int.in_dll(dynamic_library, "Nph"), "value"
     )
     add_global_variable(
-        global_env, "Nsuccess", c_int.in_dll(libedi2py, "Nsuccess"), "value"
+        global_env, "Nsuccess", c_int.in_dll(dynamic_library, "Nsuccess"), "value"
     )
     add_global_variable(
-        global_env, "Lmats", c_int.in_dll(libedi2py, "Lmats"), "value"
+        global_env, "Lmats", c_int.in_dll(dynamic_library, "Lmats"), "value"
     )
     add_global_variable(
-        global_env, "Lreal", c_int.in_dll(libedi2py, "Lreal"), "value"
+        global_env, "Lreal", c_int.in_dll(dynamic_library, "Lreal"), "value"
     )
     add_global_variable(
-        global_env, "Ltau", c_int.in_dll(libedi2py, "Ltau"), "value"
+        global_env, "Ltau", c_int.in_dll(dynamic_library, "Ltau"), "value"
     )
     add_global_variable(
-        global_env, "Lfit", c_int.in_dll(libedi2py, "Lfit"), "value"
+        global_env, "Lfit", c_int.in_dll(dynamic_library, "Lfit"), "value"
     )
     add_global_variable(
-        global_env, "Lpos", c_int.in_dll(libedi2py, "Lpos"), "value"
+        global_env, "Lpos", c_int.in_dll(dynamic_library, "Lpos"), "value"
     )
     add_global_variable(
-        global_env, "LOGfile", c_int.in_dll(libedi2py, "LOGfile"), "value"
+        global_env, "LOGfile", c_int.in_dll(dynamic_library, "LOGfile"), "value"
     )
 
     add_global_variable(
         global_env,
         "Uloc",
-        ARRAY(c_double, 5).in_dll(libedi2py, "Uloc"),
+        ARRAY(c_double, 5).in_dll(dynamic_library, "Uloc"),
         "value",
     )
     add_global_variable(
-        global_env, "Ust", c_double.in_dll(libedi2py, "Ust"), "value"
+        global_env, "Ust", c_double.in_dll(dynamic_library, "Ust"), "value"
     )
     add_global_variable(
-        global_env, "Jh", c_double.in_dll(libedi2py, "Jh"), "value"
+        global_env, "Jh", c_double.in_dll(dynamic_library, "Jh"), "value"
     )
     add_global_variable(
-        global_env, "Jx", c_double.in_dll(libedi2py, "Jx"), "value"
+        global_env, "Jx", c_double.in_dll(dynamic_library, "Jx"), "value"
     )
     add_global_variable(
-        global_env, "Jp", c_double.in_dll(libedi2py, "Jp"), "value"
+        global_env, "Jp", c_double.in_dll(dynamic_library, "Jp"), "value"
     )
     add_global_variable(
-        global_env, "xmu", c_double.in_dll(libedi2py, "xmu"), "value"
+        global_env, "xmu", c_double.in_dll(dynamic_library, "xmu"), "value"
     )
     add_global_variable(
-        global_env, "beta", c_double.in_dll(libedi2py, "beta"), "value"
+        global_env, "beta", c_double.in_dll(dynamic_library, "beta"), "value"
     )
     add_global_variable(
         global_env,
         "dmft_error",
-        c_double.in_dll(libedi2py, "dmft_error"),
+        c_double.in_dll(dynamic_library, "dmft_error"),
         "value",
     )
     add_global_variable(
-        global_env, "eps", c_double.in_dll(libedi2py, "eps"), "value"
+        global_env, "eps", c_double.in_dll(dynamic_library, "eps"), "value"
     )
     add_global_variable(
-        global_env, "wini", c_double.in_dll(libedi2py, "wini"), "value"
+        global_env, "wini", c_double.in_dll(dynamic_library, "wini"), "value"
     )
     add_global_variable(
-        global_env, "wfin", c_double.in_dll(libedi2py, "wfin"), "value"
+        global_env, "wfin", c_double.in_dll(dynamic_library, "wfin"), "value"
     )
     add_global_variable(
-        global_env, "xmin", c_double.in_dll(libedi2py, "xmin"), "value"
+        global_env, "xmin", c_double.in_dll(dynamic_library, "xmin"), "value"
     )
     add_global_variable(
-        global_env, "xmax", c_double.in_dll(libedi2py, "xmax"), "value"
+        global_env, "xmax", c_double.in_dll(dynamic_library, "xmax"), "value"
     )
     add_global_variable(
-        global_env, "sb_field", c_double.in_dll(libedi2py, "sb_field"), "value"
+        global_env, "sb_field", c_double.in_dll(dynamic_library, "sb_field"), "value"
     )
     add_global_variable(
-        global_env, "nread", c_double.in_dll(libedi2py, "nread"), "value"
+        global_env, "nread", c_double.in_dll(dynamic_library, "nread"), "value"
     )
 
     add_global_variable(
         global_env,
         "ed_total_ud",
-        c_bool.in_dll(libedi2py, "ed_total_ud"),
+        c_bool.in_dll(dynamic_library, "ed_total_ud"),
         "value",
     )
     add_global_variable(
-        global_env, "ed_twin", c_bool.in_dll(libedi2py, "ed_twin"), "value"
+        global_env, "ed_twin", c_bool.in_dll(dynamic_library, "ed_twin"), "value"
     )
 except Exception:
     print(
-        "Could not setup global vars. Is edipack2 (or edipack2ineq) installed?"
+        "Could not setup global vars. Is EDIpack (or EDIpack2ineq) installed?"
     )
 
 

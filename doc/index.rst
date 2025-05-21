@@ -1,11 +1,11 @@
-EDIpy2.0
+EDIpack2py
 ################
 
 
 
-`EDIpy2.0` is a Python API for the `EDIpack2.0 <https://edipack.github.io/EDIpack2.0>`_ Quantum Impurity Solver.
+`EDIpack2py` is a Python API for the `EDIpack <https://edipack.github.io/EDIpack>`_ Quantum Impurity Solver.
 It is available as a python module, installable through :code:`pip`, as well as an Anaconda package bundled with the
-`EDIpack2.0` library and a plug-in solver for the `TRIQS <https://triqs.github.io/triqs/latest/>`_ suite through a compatibility layer.
+`EDIpack` library and a plug-in solver for the `TRIQS <https://triqs.github.io/triqs/latest/>`_ suite through a compatibility layer.
 
 
 .. Hidden TOCs
@@ -29,8 +29,8 @@ It is available as a python module, installable through :code:`pip`, as well as 
 .. toctree::
    :caption: External Links
    
-   EDIpy2.0 on GitHub <https://github.com/edipack/EDIpy2.0>
-   EDIpack2.0 on GitHub <https://github.com/edipack/EDIpack2.0>
+   EDIpack2py on GitHub <https://github.com/edipack/EDIpack2py>
+   EDIpack on GitHub <https://github.com/edipack/EDIpack>
    SciFortran on GitHub <https://github.com/SciFortran/SciFortran>
 
 
