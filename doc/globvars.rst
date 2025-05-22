@@ -246,7 +246,7 @@ The exposed global variables can be accessed as properties of the :class:`edipac
    Accesses :f:var:`wfin`
    
    :type: float
-   :default: -5.0
+   :default: 5.0
    
 .. data:: edipack2py.global_env.xmin
 
