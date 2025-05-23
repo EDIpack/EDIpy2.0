@@ -203,7 +203,10 @@ try:
         global_env, "Nph", c_int.in_dll(dynamic_library, "Nph"), "value"
     )
     add_global_variable(
-        global_env, "Nsuccess", c_int.in_dll(dynamic_library, "Nsuccess"), "value"
+        global_env,
+        "Nsuccess",
+        c_int.in_dll(dynamic_library, "Nsuccess"),
+        "value",
     )
     add_global_variable(
         global_env, "Lmats", c_int.in_dll(dynamic_library, "Lmats"), "value"
@@ -221,7 +224,10 @@ try:
         global_env, "Lpos", c_int.in_dll(dynamic_library, "Lpos"), "value"
     )
     add_global_variable(
-        global_env, "LOGfile", c_int.in_dll(dynamic_library, "LOGfile"), "value"
+        global_env,
+        "LOGfile",
+        c_int.in_dll(dynamic_library, "LOGfile"),
+        "value",
     )
 
     add_global_variable(
@@ -270,7 +276,10 @@ try:
         global_env, "xmax", c_double.in_dll(dynamic_library, "xmax"), "value"
     )
     add_global_variable(
-        global_env, "sb_field", c_double.in_dll(dynamic_library, "sb_field"), "value"
+        global_env,
+        "sb_field",
+        c_double.in_dll(dynamic_library, "sb_field"),
+        "value",
     )
     add_global_variable(
         global_env, "nread", c_double.in_dll(dynamic_library, "nread"), "value"
@@ -283,7 +292,10 @@ try:
         "value",
     )
     add_global_variable(
-        global_env, "ed_twin", c_bool.in_dll(dynamic_library, "ed_twin"), "value"
+        global_env,
+        "ed_twin",
+        c_bool.in_dll(dynamic_library, "ed_twin"),
+        "value",
     )
 except Exception:
     print(

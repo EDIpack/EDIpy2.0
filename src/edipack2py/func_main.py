@@ -51,11 +51,11 @@ def init_solver(self, bath=None, Nb=None, Nlat=None):
     """
     if bath is None:
         if Nb is None and Nlat is None:
-            Nb = self.library.get_bath_dimension()
+            Nb = self.get_bath_dimension()
             bath = np.zeros(Nb, dtype="float", order="F")
         elif Nb is None and Nlat is not None:
             if self.has_ineq:
-                Nb = self.library.get_bath_dimension()
+                Nb = self.get_bath_dimension()
                 bath = np.zeros((Nlat, Nb), dtype="float", order="F")
             else:
                 raise RuntimeError(

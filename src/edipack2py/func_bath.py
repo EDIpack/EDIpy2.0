@@ -13,10 +13,27 @@ def get_bath_dimension(self):
     :return: a number which is the dimension of the bath array for each impurity.
     :rtype: int
     """
-    get_bath_dimension_wrap = self.library.get_bath_dimension
-    get_bath_dimension_wrap.argtypes = None
-    get_bath_dimension_wrap.restype = c_int
-    return get_bath_dimension_wrap()
+    get_bath_dimension_direct_wrap = self.library.get_bath_dimension_direct
+    get_bath_dimension_direct_wrap.argtypes = None
+    get_bath_dimension_direct_wrap.restype = c_int
+
+    get_bath_dimension_symmetries_wrap = (
+        self.library.get_bath_dimension_symmetries
+    )
+    get_bath_dimension_symmetries_wrap.argtypes = [c_int]
+    get_bath_dimension_symmetries_wrap.restype = c_int
+
+    if self.Nsym is None:
+        if self.get_bath_type() > 2:
+            raise RuntimeError(
+                "get_bath_dimension: no replica/general matrix is initialized "
+            )
+        else:
+            bathdim = get_bath_dimension_direct_wrap()
+    else:
+        bathdim = get_bath_dimension_symmetries_wrap(self.Nsym)
+
+    return bathdim
 
 
 # init_hreplica
@@ -118,8 +135,8 @@ def set_hreplica(self, hvec, lambdavec):
     dim_lambdavec = np.asarray(np.shape(lambdavec), dtype=np.int64, order="F")
 
     self.Nsym = dim_lambdavec[1]
-    
-    #Arrays in Fortran ordering
+
+    # Arrays in Fortran ordering
     lambdavec = np.asfortranarray(lambdavec)
     hvec = np.asfortranarray(hvec)
 
@@ -260,8 +277,8 @@ def set_hgeneral(self, hvec, lambdavec):
     dim_lambdavec = np.asarray(np.shape(lambdavec), dtype=np.int64, order="F")
 
     self.Nsym = dim_lambdavec[1]
-    
-    #Arrays in Fortran ordering
+
+    # Arrays in Fortran ordering
     lambdavec = np.asfortranarray(lambdavec)
     hvec = np.asfortranarray(hvec)
 
@@ -1241,7 +1258,7 @@ def bath_inspect(self, bath=None, e=None, v=None, d=None, u=None, l=None):
                 bath[io] = v[ibath]
                 io += 1
                 il = 0
-                for il in range(Nsym):
+                for il in range(self.Nsym):
                     bath[io] = l[ibath, il]
                     io += 1
                     il += 1
@@ -1265,7 +1282,7 @@ def bath_inspect(self, bath=None, e=None, v=None, d=None, u=None, l=None):
                 v[ibath] = bath[io]
                 io += 1
                 il = 0
-                for il in range(Nsym):
+                for il in range(self.Nsym):
                     l[ibath, il] = bath[io]
                     io += 1
                     il += 1
@@ -1303,7 +1320,7 @@ def bath_inspect(self, bath=None, e=None, v=None, d=None, u=None, l=None):
                     io += 1
                     iv += 1
                 il = 0
-                for il in range(Nsym):
+                for il in range(self.Nsym):
                     bath[io] = l[ibath, il]
                     io += 1
                     il += 1
@@ -1331,7 +1348,7 @@ def bath_inspect(self, bath=None, e=None, v=None, d=None, u=None, l=None):
                     io += 1
                     iv += 1
                 il = 0
-                for il in range(Nsym):
+                for il in range(self.Nsym):
                     l[ibath, il] = bath[io]
                     io += 1
                     il += 1
