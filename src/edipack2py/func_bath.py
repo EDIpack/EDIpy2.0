@@ -23,15 +23,15 @@ def get_bath_dimension(self):
     get_bath_dimension_symmetries_wrap.argtypes = [c_int]
     get_bath_dimension_symmetries_wrap.restype = c_int
 
-    if self.Nsym is None:
-        if self.get_bath_type() > 2:
+    if self.get_bath_type() > 2:  # replica/general
+        if self.Nsym is None:
             raise RuntimeError(
                 "get_bath_dimension: no replica/general matrix is initialized "
             )
         else:
-            bathdim = get_bath_dimension_direct_wrap()
+            bathdim = get_bath_dimension_symmetries_wrap(self.Nsym)
     else:
-        bathdim = get_bath_dimension_symmetries_wrap(self.Nsym)
+        bathdim = get_bath_dimension_direct_wrap()
 
     return bathdim
 
