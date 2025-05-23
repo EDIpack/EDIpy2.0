@@ -271,16 +271,16 @@ def set_hgeneral(self, hvec, lambdavec):
         ]
         init_hgeneral_symmetries_lattice_d3.restype = None
 
+    # Arrays in Fortran ordering
+    lambdavec = np.asfortranarray(lambdavec)
+    hvec = np.asfortranarray(hvec)
+
     aux_norb = c_int.in_dll(self.library, "Norb").value
     aux_nspin = c_int.in_dll(self.library, "Nspin").value
     dim_hvec = np.asarray(np.shape(hvec), dtype=np.int64, order="F")
     dim_lambdavec = np.asarray(np.shape(lambdavec), dtype=np.int64, order="F")
 
     self.Nsym = dim_lambdavec[1]
-
-    # Arrays in Fortran ordering
-    lambdavec = np.asfortranarray(lambdavec)
-    hvec = np.asfortranarray(hvec)
 
     if len(dim_hvec) == 3:
         if len(dim_lambdavec) == 2:
@@ -375,7 +375,10 @@ def break_symmetry_bath(self, bath, field, sign, save=True):
         save_int = 1
     else:
         save_int = 0
+
+    bath = np.ascontiguousarray(bath)        
     bath_shape = np.asarray(np.shape(bath), dtype=np.int64, order="F")
+    
     if (len(bath_shape)) == 1:
         break_symmetry_bath_site(
             bath, bath_shape, field, float(sign), save_int
@@ -388,6 +391,7 @@ def break_symmetry_bath(self, bath, field, sign, save=True):
             raise RuntimeError(
                 "Can't use r-DMFT routines without installing EDIpack2ineq"
             )
+    bath = np.ascontiguousarray(bath)
     return bath
 
 
@@ -430,7 +434,10 @@ def spin_symmetrize_bath(self, bath, save=True):
         save_int = 1
     else:
         save_int = 0
+        
+    bath = np.asfortranarray(bath)    
     bath_shape = np.asarray(np.shape(bath), dtype=np.int64, order="F")
+    
     if (len(bath_shape)) == 1:
         spin_symmetrize_bath_site(bath, bath_shape, save_int)
     else:
@@ -440,6 +447,7 @@ def spin_symmetrize_bath(self, bath, save=True):
             raise RuntimeError(
                 "Can't use r-DMFT routines without installing EDIpack2ineq"
             )
+    bath = np.ascontiguousarray(bath)
     return bath
 
 
@@ -488,6 +496,8 @@ def orb_symmetrize_bath(self, bath, orb1, orb2, save=True):
         save_int = 1
     else:
         save_int = 0
+        
+    bath = np.asfortranarray(bath)    
     bath_shape = np.asarray(np.shape(bath), dtype=np.int64, order="F")
     if (len(bath_shape)) == 1:
         orb_symmetrize_bath_site(
@@ -502,6 +512,7 @@ def orb_symmetrize_bath(self, bath, orb1, orb2, save=True):
             raise RuntimeError(
                 "Can't use r-DMFT routines without installing EDIpack2ineq"
             )
+    bath = np.ascontiguousarray(bath)
     return bath
 
 
@@ -553,7 +564,10 @@ def orb_equality_bath(self, bath, indx, save=True):
         save_int = 1
     else:
         save_int = 0
+    
+    bath = np.asfortranarray(bath)  
     bath_shape = np.asarray(np.shape(bath), dtype=np.int64, order="F")
+    
     if (indx < 0) or (indx >= aux_norb):
         raise ValueError(
             "orb_equality_bath: orbital index should be in [0,Norb]"
@@ -569,6 +583,7 @@ def orb_equality_bath(self, bath, indx, save=True):
                 raise RuntimeError(
                     "Can't use r-DMFT routines without installing EDIpack2ineq"
                 )
+    bath = np.ascontiguousarray(bath)
     return bath
 
 
@@ -608,7 +623,10 @@ def ph_symmetrize_bath(self, bath, save):
         save_int = 1
     else:
         save_int = 0
+        
+    bath = np.asfortranarray(bath)  
     bath_shape = np.asarray(np.shape(bath), dtype=np.int64, order="F")
+    
     if (len(bath_shape)) == 1:
         ph_symmetrize_bath_site(bath, bath_shape, save_int)
     else:
@@ -618,6 +636,7 @@ def ph_symmetrize_bath(self, bath, save):
             raise RuntimeError(
                 "Can't use r-DMFT routines without installing EDIpack2ineq"
             )
+    bath = np.ascontiguousarray(bath)
     return bath
 
 
@@ -649,7 +668,9 @@ def save_array_as_bath(self, bath):
         ]
         save_array_as_bath_ineq.restypes = None
 
+    bath = np.asfortranarray(bath)  
     bath_shape = np.asarray(np.shape(bath), dtype=np.int64, order="F")
+    
     if (len(bath_shape)) == 1:
         save_array_as_bath_site(bath, bath_shape)
     else:
@@ -764,6 +785,7 @@ def bath_inspect(self, bath=None, e=None, v=None, d=None, u=None, l=None):
                             + (ispin) * aux_nbath * aux_norb
                         )
                         bath[io] = v[ispin, iorb, ibath]
+            bath = np.ascontiguousarray(bath)
             return bath
 
         elif bath is not None and e is None and v is None:  # e and v are none
@@ -798,6 +820,8 @@ def bath_inspect(self, bath=None, e=None, v=None, d=None, u=None, l=None):
                             + (ispin) * aux_nbath * aux_norb
                         )
                         v[ispin, iorb, ibath] = bath[io]
+            e = np.ascontiguousarray(e)
+            v = np.ascontiguousarray(v)
             return e, v
         else:
             raise ValueError("Wrong input for normal/normal")
@@ -853,6 +877,7 @@ def bath_inspect(self, bath=None, e=None, v=None, d=None, u=None, l=None):
                             + (ispin) * aux_nbath * aux_norb
                         )
                         bath[io] = v[ispin, iorb, ibath]
+            bath = np.ascontiguousarray(bath)
             return bath
         elif bath is None and e is None and v is None and d is None:
             bath = np.asarray(bath, order="F")
@@ -898,6 +923,9 @@ def bath_inspect(self, bath=None, e=None, v=None, d=None, u=None, l=None):
                             + (ispin) * aux_nbath * aux_norb
                         )
                         v[ispin, iorb, ibath] = bath[io]
+            e = np.ascontiguousarray(e)
+            d = np.ascontiguousarray(d)
+            v = np.ascontiguousarray(v)
             return e, d, v
         else:
             raise ValueError("Wrong input for superc/normal")
@@ -953,6 +981,7 @@ def bath_inspect(self, bath=None, e=None, v=None, d=None, u=None, l=None):
                             + (ispin) * aux_nbath * aux_norb
                         )
                         bath[io] = u[ispin, iorb, ibath]
+            bath = np.ascontiguousarray(bath)
             return bath
         elif bath is not None and e is None and v is None and u is None:
             bath = np.asarray(bath, order="F")
@@ -998,6 +1027,9 @@ def bath_inspect(self, bath=None, e=None, v=None, d=None, u=None, l=None):
                             + (ispin) * aux_nbath * aux_norb
                         )
                         u[ispin, iorb, ibath] = bath[io]
+            e = np.ascontiguousarray(e)
+            v = np.ascontiguousarray(v)
+            u = np.ascontiguousarray(u)
             return e, v, u
         else:
             raise ValueError("Wrong input for nonsu2/normal")
@@ -1036,6 +1068,7 @@ def bath_inspect(self, bath=None, e=None, v=None, d=None, u=None, l=None):
                             + (ispin) * aux_nbath * aux_norb
                         )
                         bath[io] = v[ispin, iorb, ibath]
+            bath = np.ascontiguousarray(bath)
             return bath
 
         elif bath is not None and e is None and v is None:
@@ -1064,6 +1097,8 @@ def bath_inspect(self, bath=None, e=None, v=None, d=None, u=None, l=None):
                             + (ispin) * aux_nbath * aux_norb
                         )
                         v[ispin, iorb, ibath] = bath[io]
+            e = np.ascontiguousarray(e)
+            v = np.ascontiguousarray(v)
             return e, v
         else:
             raise ValueError("Wrong input for normal/hybrid")
@@ -1107,6 +1142,7 @@ def bath_inspect(self, bath=None, e=None, v=None, d=None, u=None, l=None):
                             + (ispin) * aux_nbath * aux_norb
                         )
                         bath[io] = v[ispin, iorb, ibath]
+            bath = np.ascontiguousarray(bath)
             return bath
         elif bath is not None and e is None and v is None and d is None:
             bath = np.asarray(bath, order="F")
@@ -1140,6 +1176,9 @@ def bath_inspect(self, bath=None, e=None, v=None, d=None, u=None, l=None):
                             + (ispin) * aux_nbath * aux_norb
                         )
                         v[ispin, iorb, ibath] = bath[io]
+            e = np.ascontiguousarray(e)
+            d = np.ascontiguousarray(d)
+            v = np.ascontiguousarray(v)
             return e, d, v
         else:
             raise ValueError("Wrong input for superc/hybrid")
@@ -1190,6 +1229,7 @@ def bath_inspect(self, bath=None, e=None, v=None, d=None, u=None, l=None):
                             + (ispin) * aux_nbath * aux_norb
                         )
                         bath[io] = u[ispin, iorb, ibath]
+            bath = np.ascontiguousarray(bath)
             return bath
         elif bath is not None and e is None and v is None and u is None:
             bath = np.asarray(bath, order="F")
@@ -1229,6 +1269,9 @@ def bath_inspect(self, bath=None, e=None, v=None, d=None, u=None, l=None):
                             + (ispin) * aux_nbath * aux_norb
                         )
                         u[ispin, iorb, ibath] = bath[io]
+            e = np.ascontiguousarray(e)
+            v = np.ascontiguousarray(v)
+            u = np.ascontiguousarray(u)
             return e, v, u
         else:
             raise ValueError("Wrong input for nonsu2/hybrid")
@@ -1262,6 +1305,7 @@ def bath_inspect(self, bath=None, e=None, v=None, d=None, u=None, l=None):
                     bath[io] = l[ibath, il]
                     io += 1
                     il += 1
+            bath = np.ascontiguousarray(bath)
             return bath
 
         elif bath is not None and l is None and v is None:  # e and v are none
@@ -1286,6 +1330,8 @@ def bath_inspect(self, bath=None, e=None, v=None, d=None, u=None, l=None):
                     l[ibath, il] = bath[io]
                     io += 1
                     il += 1
+            l = np.ascontiguousarray(l)
+            v = np.ascontiguousarray(v)
             return l, v
         else:
             raise ValueError("Wrong input for replica")
@@ -1324,6 +1370,7 @@ def bath_inspect(self, bath=None, e=None, v=None, d=None, u=None, l=None):
                     bath[io] = l[ibath, il]
                     io += 1
                     il += 1
+            bath = np.ascontiguousarray(bath)
             return bath
 
         elif bath is not None and l is None and v is None:  # e and v are none
@@ -1352,6 +1399,8 @@ def bath_inspect(self, bath=None, e=None, v=None, d=None, u=None, l=None):
                     l[ibath, il] = bath[io]
                     io += 1
                     il += 1
+            l = np.ascontiguousarray(l)
+            v = np.ascontiguousarray(v)
             return l, v
         else:
             raise ValueError("Wrong input for replica")

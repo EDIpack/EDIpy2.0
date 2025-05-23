@@ -106,7 +106,9 @@ def init_solver(self, bath=None, Nb=None, Nlat=None):
             raise RuntimeError(
                 "Can't use r-DMFT routines without installing EDIpack2ineq"
             )
-
+    
+    bath = np.ascontiguousarray(bath)
+    
     return bath
 
 
@@ -164,6 +166,7 @@ def solve(self, bath, flag_gf=True, flag_mpi=True, mpi_lanc=False):
         ]  # flag_mpi
         solve_ineq.restype = None
 
+    bath     = np.asfortranarray(bath)
     dim_bath = np.asarray(np.shape(bath), dtype=np.int64, order="F")
 
     if len(dim_bath) < 2:
@@ -175,6 +178,8 @@ def solve(self, bath, flag_gf=True, flag_mpi=True, mpi_lanc=False):
             raise RuntimeError(
                 "Can't use r-DMFT routines without installing EDIpack2ineq"
             )
+            
+    return
 
 
 # finalize solver

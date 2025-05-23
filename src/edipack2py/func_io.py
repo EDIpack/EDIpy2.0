@@ -45,6 +45,7 @@ def get_dens(self, ilat=None, iorb=None):
     if self.Nineq == 0:
         densvec = np.zeros(aux_norb, dtype=float, order="F")
         ed_get_dens_n1_wrap(densvec)
+        densvec = np.ascontiguousarray(densvec)
 
         if ilat is not None:
             raise ValueError("ilat cannot be none for single-impurity DMFT")
@@ -56,7 +57,7 @@ def get_dens(self, ilat=None, iorb=None):
         if self.has_ineq:
             densvec = np.zeros([self.Nineq, aux_norb], dtype=float, order="F")
             ed_get_dens_n2_wrap(densvec, self.Nineq)
-            densvec = np.asarray(densvec)
+            densvec = np.ascontiguousarray(densvec)
 
             if ilat is not None and iorb is not None:
                 return densvec[ilat, iorb]
@@ -123,6 +124,7 @@ def get_mag(self, icomp=None, ilat=None, iorb=None):
     if self.Nineq == 0:
         magvec = np.zeros([3, aux_norb], dtype=float, order="F")
         ed_get_mag_n2_wrap(magvec)
+        magvec = np.ascontiguousarray(magvec)
 
         if ilat is not None:
             raise ValueError("ilat cannot be none for single-impurity DMFT")
@@ -140,7 +142,7 @@ def get_mag(self, icomp=None, ilat=None, iorb=None):
                 [self.Nineq, 3, aux_norb], dtype=float, order="F"
             )
             ed_get_mag_n3_wrap(magvec, self.Nineq)
-            magvec = np.asarray(magvec)
+            magvec = np.ascontiguousarray(magvec)
 
             if ilat is not None:
                 if iorb is not None and icomp is not None:
@@ -204,6 +206,7 @@ def get_docc(self, ilat=None, iorb=None):
     if self.Nineq == 0:
         doccvec = np.zeros(aux_norb, dtype=float, order="F")
         ed_get_docc_n1_wrap(doccvec)
+        doccvec = np.ascontiguousarray(doccvec)
 
         if ilat is not None:
             raise ValueError("ilat cannot be none for single-impurity DMFT")
@@ -215,7 +218,7 @@ def get_docc(self, ilat=None, iorb=None):
         if self.has_ineq:
             doccvec = np.zeros([self.Nineq, aux_norb], dtype=float, order="F")
             ed_get_docc_n2_wrap(doccvec, self.Nineq)
-            doccvec = np.asarray(doccvec)
+            doccvec = np.ascontiguousarray(doccvec)
 
             if ilat is not None and iorb is not None:
                 return doccvec[ilat, iorb]
@@ -276,7 +279,7 @@ def get_phi(self, ilat=None, iorb=None, jorb=None):
     if self.Nineq == 0:
         phivec = np.zeros((aux_norb, aux_norb), dtype=float, order="F")
         ed_get_phisc_n2_wrap(phivec)
-        phivec = np.asarray(phivec)
+        phivec = np.ascontiguousarray(phivec)
 
         if ilat is not None:
             raise ValueError("ilat cannot be none for single-impurity DMFT")
@@ -294,7 +297,7 @@ def get_phi(self, ilat=None, iorb=None, jorb=None):
                 [self.Nineq, aux_norb, aux_norb], dtype=float, order="F"
             )
             ed_get_docc_n3_wrap(phivec, self.Nineq)
-            phivec = np.asarray(phivec)
+            phivec = np.ascontiguousarray(phivec)
 
             if ilat is not None:
                 if iorb is not None and jorb is not None:
@@ -358,6 +361,7 @@ def get_eimp(self, ilat=None, ikind=None):
     if self.Nineq == 0:
         eimp_vec = np.zeros(4, dtype=float, order="F")
         ed_get_eimp_n1_wrap(eimp_vec)
+        eimp_vec = np.ascontiguousarray(eimp_vec)
 
         if ilat is not None:
             raise ValueError("ilat cannot be none for single-impurity DMFT")
@@ -369,7 +373,7 @@ def get_eimp(self, ilat=None, ikind=None):
         if self.has_ineq:
             eimp_vec = np.zeros([self.Nineq, 4], dtype=float, order="F")
             ed_get_eimp_n2_wrap(eimp_vec, self.Nineq)
-            eimp_vec = np.asarray(eimp_vec)
+            eimp_vec = np.ascontiguousarray(eimp_vec)
 
             if ilat is not None and ikind is not None:
                 return eimp_vec[ilat, ikind]
@@ -596,6 +600,7 @@ def get_sigma(self, ilat=None, ishape=None, axis="m", typ="n", zeta=None):
             ed_get_sigma_site_n5(Sigma, axisint, typint, zeta, nfreq, zflag)
         else:
             raise ValueError("Shape(array) != 3,5 in get_sigma_site")
+        Sigma = np.ascontiguousarray(Sigma)
         return Sigma
     else:
         if self.has_ineq:
@@ -644,6 +649,7 @@ def get_sigma(self, ilat=None, ishape=None, axis="m", typ="n", zeta=None):
                 )
             else:
                 raise ValueError("Shape(array) != 3,4,6 in get_sigma_lattice")
+            Sigma = np.ascontiguousarray(Sigma)
             if ilat is not None and ishape != 3:
                 return Sigma[ilat]
             else:
@@ -867,6 +873,7 @@ def get_gimp(self, ilat=None, ishape=None, axis="m", typ="n", zeta=None):
             ed_get_gimp_site_n5(gimp, axisint, typint, zeta, nfreq, zflag)
         else:
             raise ValueError("Shape(array) != 3,5 in get_gimp_site")
+        gimp = np.ascontiguousarray(gimp)
         return gimp
     else:
         if self.has_ineq:
@@ -915,6 +922,7 @@ def get_gimp(self, ilat=None, ishape=None, axis="m", typ="n", zeta=None):
                 )
             else:
                 raise ValueError("Shape(array) != 3,4,6 in get_gimp_lattice")
+            gimp = np.ascontiguousarray(gimp)
             if ilat is not None and ishape != 3:
                 return gimp[ilat]
             else:
@@ -999,6 +1007,9 @@ def get_g0and(self, zeta, bath, ishape=None, typ="n"):
     nspin_aux = c_int.in_dll(self.library, "Nspin").value
 
     zeta = zeta.astype(complex)
+    
+    zeta = np.asfortranarray(zeta)
+    bath = np.asfortranarray(bath)
 
     nfreq = np.shape(zeta)[0]
     dimbath = np.shape(bath)[0]
@@ -1058,6 +1069,7 @@ def get_g0and(self, zeta, bath, ishape=None, typ="n"):
         )
     else:
         raise ValueError("Shape(array) != 3,5 in get_g0and")
+    G0and = np.ascontiguousarray(G0and)
     return G0and
 
 
@@ -1132,6 +1144,9 @@ def get_delta(self, zeta, bath, ishape=None, typ="n"):
     nspin_aux = c_int.in_dll(self.library, "Nspin").value
 
     zeta = zeta.astype(complex)
+    
+    zeta = np.asfortranarray(zeta)
+    bath = np.asfortranarray(bath)
 
     nfreq = np.shape(zeta)[0]
     dimbath = np.shape(bath)[0]
@@ -1191,6 +1206,7 @@ def get_delta(self, zeta, bath, ishape=None, typ="n"):
         )
     else:
         raise ValueError("Shape(array) != 3,5 in get_delta")
+    Delta = np.ascontiguousarray(Delta)
     return Delta
 
 
@@ -1338,6 +1354,8 @@ def get_chi(self, chan="spin", zeta=None, axis=None, ilat=None):
         )
 
     zetaflag = 1
+    
+    zeta = np.asfortranarray(zeta)
 
     if axis is None:
         raise ValueError("Axis is required")
@@ -1397,7 +1415,9 @@ def get_chi(self, chan="spin", zeta=None, axis=None, ilat=None):
         ed_get_exctchi(
             chi, zeta, nfreq, zetaflag, axisflag, Nsites, latticeflag
         )
-
+    
+    chi = np.ascontiguousarray(chi)
+    
     if self.Nineq == 0:
         return chi[0]
     else:
