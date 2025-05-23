@@ -118,6 +118,10 @@ def set_hreplica(self, hvec, lambdavec):
     dim_lambdavec = np.asarray(np.shape(lambdavec), dtype=np.int64, order="F")
 
     self.Nsym = dim_lambdavec[1]
+    
+    #Arrays in Fortran ordering
+    lambdavec = np.asfortranarray(lambdavec)
+    hvec = np.asfortranarray(hvec)
 
     if len(dim_hvec) == 3:
         if len(dim_lambdavec) == 2:
@@ -256,6 +260,10 @@ def set_hgeneral(self, hvec, lambdavec):
     dim_lambdavec = np.asarray(np.shape(lambdavec), dtype=np.int64, order="F")
 
     self.Nsym = dim_lambdavec[1]
+    
+    #Arrays in Fortran ordering
+    lambdavec = np.asfortranarray(lambdavec)
+    hvec = np.asfortranarray(hvec)
 
     if len(dim_hvec) == 3:
         if len(dim_lambdavec) == 2:
