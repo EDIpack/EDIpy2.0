@@ -1,5 +1,5 @@
 import numpy as np
-from edipy2 import global_env as ed
+from edipack2py import global_env as ed
 from mpi4py import MPI
 import os,sys
 
