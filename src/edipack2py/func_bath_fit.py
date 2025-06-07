@@ -92,7 +92,7 @@ def chi2_fitgf(self, *args, ispin=0, iorb=None, fmpi=True):
     """
 
     nbath_aux = c_int.in_dll(self.library, "Nbath").value
-    
+
     if nbath_aux == 0:
         print("Nbath=0. No bath to fit")
         return
@@ -369,6 +369,6 @@ def chi2_fitgf(self, *args, ispin=0, iorb=None, fmpi=True):
             raise ValueError("chi_fitgf_superc: takes dim(bath) = 1 or 2")
     else:
         raise ValueError("chi_fitgf: takes g,bath or g,f,bath")
-        
+
     bath_copy = np.ascontiguousarray(bath_copy)
     return bath_copy

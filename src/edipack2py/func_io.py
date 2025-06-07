@@ -1007,7 +1007,7 @@ def get_g0and(self, zeta, bath, ishape=None, typ="n"):
     nspin_aux = c_int.in_dll(self.library, "Nspin").value
 
     zeta = zeta.astype(complex)
-    
+
     zeta = np.asfortranarray(zeta)
     bath = np.asfortranarray(bath)
 
@@ -1144,7 +1144,7 @@ def get_delta(self, zeta, bath, ishape=None, typ="n"):
     nspin_aux = c_int.in_dll(self.library, "Nspin").value
 
     zeta = zeta.astype(complex)
-    
+
     zeta = np.asfortranarray(zeta)
     bath = np.asfortranarray(bath)
 
@@ -1354,7 +1354,7 @@ def get_chi(self, chan="spin", zeta=None, axis=None, ilat=None):
         )
 
     zetaflag = 1
-    
+
     zeta = np.asfortranarray(zeta)
 
     if axis is None:
@@ -1415,9 +1415,9 @@ def get_chi(self, chan="spin", zeta=None, axis=None, ilat=None):
         ed_get_exctchi(
             chi, zeta, nfreq, zetaflag, axisflag, Nsites, latticeflag
         )
-    
+
     chi = np.ascontiguousarray(chi)
-    
+
     if self.Nineq == 0:
         return chi[0]
     else:

@@ -376,9 +376,9 @@ def break_symmetry_bath(self, bath, field, sign, save=True):
     else:
         save_int = 0
 
-    bath = np.ascontiguousarray(bath)        
+    bath = np.ascontiguousarray(bath)
     bath_shape = np.asarray(np.shape(bath), dtype=np.int64, order="F")
-    
+
     if (len(bath_shape)) == 1:
         break_symmetry_bath_site(
             bath, bath_shape, field, float(sign), save_int
@@ -434,10 +434,10 @@ def spin_symmetrize_bath(self, bath, save=True):
         save_int = 1
     else:
         save_int = 0
-        
-    bath = np.asfortranarray(bath)    
+
+    bath = np.asfortranarray(bath)
     bath_shape = np.asarray(np.shape(bath), dtype=np.int64, order="F")
-    
+
     if (len(bath_shape)) == 1:
         spin_symmetrize_bath_site(bath, bath_shape, save_int)
     else:
@@ -496,8 +496,8 @@ def orb_symmetrize_bath(self, bath, orb1, orb2, save=True):
         save_int = 1
     else:
         save_int = 0
-        
-    bath = np.asfortranarray(bath)    
+
+    bath = np.asfortranarray(bath)
     bath_shape = np.asarray(np.shape(bath), dtype=np.int64, order="F")
     if (len(bath_shape)) == 1:
         orb_symmetrize_bath_site(
@@ -564,10 +564,10 @@ def orb_equality_bath(self, bath, indx, save=True):
         save_int = 1
     else:
         save_int = 0
-    
-    bath = np.asfortranarray(bath)  
+
+    bath = np.asfortranarray(bath)
     bath_shape = np.asarray(np.shape(bath), dtype=np.int64, order="F")
-    
+
     if (indx < 0) or (indx >= aux_norb):
         raise ValueError(
             "orb_equality_bath: orbital index should be in [0,Norb]"
@@ -623,10 +623,10 @@ def ph_symmetrize_bath(self, bath, save):
         save_int = 1
     else:
         save_int = 0
-        
-    bath = np.asfortranarray(bath)  
+
+    bath = np.asfortranarray(bath)
     bath_shape = np.asarray(np.shape(bath), dtype=np.int64, order="F")
-    
+
     if (len(bath_shape)) == 1:
         ph_symmetrize_bath_site(bath, bath_shape, save_int)
     else:
@@ -668,9 +668,9 @@ def save_array_as_bath(self, bath):
         ]
         save_array_as_bath_ineq.restypes = None
 
-    bath = np.asfortranarray(bath)  
+    bath = np.asfortranarray(bath)
     bath_shape = np.asarray(np.shape(bath), dtype=np.int64, order="F")
-    
+
     if (len(bath_shape)) == 1:
         save_array_as_bath_site(bath, bath_shape)
     else:

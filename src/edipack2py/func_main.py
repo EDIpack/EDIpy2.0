@@ -51,9 +51,9 @@ def init_solver(self, bath=None, Nb=None, Nlat=None):
        implemented and listed in the :ref:`bath` section.
        :rtype: np.array(dtype=float) 
     """
-    
+
     nbath_aux = c_int.in_dll(self.library, "Nbath").value
-    
+
     if bath is None:
         if Nb is None and Nlat is None:
             Nb = self.get_bath_dimension()
@@ -111,9 +111,9 @@ def init_solver(self, bath=None, Nb=None, Nlat=None):
             raise RuntimeError(
                 "Can't use r-DMFT routines without installing EDIpack2ineq"
             )
-    
+
     bath = np.ascontiguousarray(bath)
-    
+
     if nbath_aux == 0:
         return None
     else:
@@ -175,18 +175,18 @@ def solve(self, bath=None, flag_gf=True, flag_mpi=True, mpi_lanc=False):
             c_int,
         ]  # flag_mpi
         solve_ineq.restype = None
-    
+
     nbath_aux = c_int.in_dll(self.library, "Nbath").value
-    
+
     if bath is None:
         if nbath_aux != 0:
             raise RuntimeError("solve: Nbath != 0 but no bath provided")
         if self.Nineq == 0:
             bath = [0.0]
         else:
-            bath= np.zeros((self.Nineq,1))
-            
-    bath     = np.asfortranarray(bath)
+            bath = np.zeros((self.Nineq, 1))
+
+    bath = np.asfortranarray(bath)
     dim_bath = np.asarray(np.shape(bath), dtype=np.int64, order="F")
 
     if len(dim_bath) < 2:
@@ -198,7 +198,7 @@ def solve(self, bath=None, flag_gf=True, flag_mpi=True, mpi_lanc=False):
             raise RuntimeError(
                 "Can't use r-DMFT routines without installing EDIpack2ineq"
             )
-            
+
     return
 
 
