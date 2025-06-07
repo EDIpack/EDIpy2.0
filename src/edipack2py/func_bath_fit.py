@@ -91,6 +91,12 @@ def chi2_fitgf(self, *args, ispin=0, iorb=None, fmpi=True):
       :rtype: np.array(dtype=float) 
     """
 
+    nbath_aux = c_int.in_dll(self.library, "Nbath").value
+    
+    if nbath_aux == 0:
+        print("Nbath=0. No bath to fit")
+        return
+
     # single normal
     chi2_fitgf_single_normal_n3 = self.library.chi2_fitgf_single_normal_n3
     chi2_fitgf_single_normal_n3.argtypes = [

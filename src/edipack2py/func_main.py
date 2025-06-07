@@ -14,7 +14,9 @@ def init_solver(self, bath=None, Nb=None, Nlat=None):
        The function can take different argument combinations. 
        
        If no input is provided, a single-impurity bath is allocated, with \
-       dimension given by :func:`get_bath_dimension`.
+       dimension given by :func:`get_bath_dimension`. If :data:`Nbath` is ``0`` \
+       the solver will be initialized for an isolated impurity, and the function \
+       will return ``None``.
 
         
        :type bath: np.array(dtype=float) **or** [float]
@@ -49,6 +51,9 @@ def init_solver(self, bath=None, Nb=None, Nlat=None):
        implemented and listed in the :ref:`bath` section.
        :rtype: np.array(dtype=float) 
     """
+    
+    nbath_aux = c_int.in_dll(self.library, "Nbath").value
+    
     if bath is None:
         if Nb is None and Nlat is None:
             Nb = self.get_bath_dimension()
@@ -109,11 +114,14 @@ def init_solver(self, bath=None, Nb=None, Nlat=None):
     
     bath = np.ascontiguousarray(bath)
     
-    return bath
+    if nbath_aux == 0:
+        return None
+    else:
+        return bath
 
 
 # `solve`.
-def solve(self, bath, flag_gf=True, flag_mpi=True, mpi_lanc=False):
+def solve(self, bath=None, flag_gf=True, flag_mpi=True, mpi_lanc=False):
     """
        This function solves the impurity problem and calculates the \
        observables, Green's function and self-energy.
@@ -121,7 +129,9 @@ def solve(self, bath, flag_gf=True, flag_mpi=True, mpi_lanc=False):
        :type bath: np.array(dtype=float) 
        :param bath: The bath array returned by  :func:`init_solver`. \
        If the bath dimensions are inconsistent with the global properties \
-       of the problem, EDIpack will exit with an error.
+       of the problem, EDIpack will exit with an error. If no bath is provided \
+       the code will diagonalize the isolated impurity Hamiltonian. In this case \
+       if :data:`Nbath` is not ``0`` the code will raise a ``RuntimeError``.
        
        :type flag_gf: bool
        :param flag_gf: for single-impurity DMFT, if :code:`False`, it disables \
@@ -165,7 +175,17 @@ def solve(self, bath, flag_gf=True, flag_mpi=True, mpi_lanc=False):
             c_int,
         ]  # flag_mpi
         solve_ineq.restype = None
-
+    
+    nbath_aux = c_int.in_dll(self.library, "Nbath").value
+    
+    if bath is None:
+        if nbath_aux != 0:
+            raise RuntimeError("solve: Nbath != 0 but no bath provided")
+        if self.Nineq == 0:
+            bath = [0.0]
+        else:
+            bath= np.zeros((self.Nineq,1))
+            
     bath     = np.asfortranarray(bath)
     dim_bath = np.asarray(np.shape(bath), dtype=np.int64, order="F")
 
