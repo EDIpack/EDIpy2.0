@@ -23,6 +23,8 @@ These functions pass to the userspace the observables and response functions cal
 
 .. autofunction:: edipack2py.global_env.get_chi
 
+.. autofunction:: edipack2py.global_env.get_impurity_rdm
+
 
 
 

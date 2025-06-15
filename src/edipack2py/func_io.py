@@ -1425,3 +1425,42 @@ def get_chi(self, chan="spin", zeta=None, axis=None, ilat=None):
             return chi
         else:
             return chi[ilat]
+
+
+########################
+#     RDM              #
+########################
+
+
+def get_impurity_rdm(self, doprint=False):
+    """
+    
+    This function returns the impurity reduced density matrix (iRDM)
+   
+    :type doprint: bool
+    :param doprint: if :code:`True`, the RDM is printed to file. 
+   
+   
+    :return: the impurity density matrix, a square matrix of \
+     size :math:`4^{N_{orb}}\\times 4^{N_{orb}}`
+    :rtype: np.array(dtype=complex) 
+    
+    """
+    aux_norb = c_int.in_dll(self.library, "Norb").value
+
+    ed_get_impurity_rdm_wrap = self.library.ed_get_impurity_rdm
+    ed_get_impurity_rdm_wrap.argtypes = [
+        np.ctypeslib.ndpointer(dtype=complex, ndim=2, flags="F_CONTIGUOUS")
+    ]
+    ed_get_impurity_rdm_wrap.restype = None
+
+    rdm = np.zeros((4**aux_norb, 4**aux_norb), dtype=complex, order="F")
+
+    if not doprint:
+        ed_get_impurity_rdm_wrap(rdm, False)
+    else:
+        ed_get_impurity_rdm_wrap(rdm, True)
+
+    rdm = np.ascontiguousarray(rdm)
+
+    return rdm
