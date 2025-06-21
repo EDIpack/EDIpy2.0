@@ -234,8 +234,8 @@ def get_docc(self, ilat=None, iorb=None):
             )
 
 
-# superconductive phi: modulus
-def get_phi(self, ilat=None, iorb=None, jorb=None):
+# superconductive phi
+def get_phi(self, ilat=None, iorb=None, jorb=None, component=None):
     """
     This function returns the modulus :math:`|\\phi|` of the superconductive order \
     parameter :math:`\\phi = \\langle c_{\\uparrow} c_{\\downarrow} \\rangle`
@@ -250,7 +250,12 @@ def get_phi(self, ilat=None, iorb=None, jorb=None):
    :type jorb: int
    :param jorb: the second orbital index
    
-   :return: :math:`\\phi`. The full tensor has dimensions [ :code:`Nlat`, \
+    :type component: str
+    :param component: if :code:`mod` returns the modulus of :math:`phi`, if :code:`arg` \
+      returns the argument. By default returns both.
+   
+   :return: :math:`|\\phi|`, :math:`\mathrm{arg}(\phi)`. \
+    The full tensors have dimensions [ :code:`Nlat`, \
    :data:`Norb`, :data:`Norb`]. Depending on which keyword arguments are \
     (or not) provided, this is sliced on the corresponding axis.
    :rtype: float **or** np.array(dtype=float)
@@ -266,6 +271,15 @@ def get_phi(self, ilat=None, iorb=None, jorb=None):
         )  # self
     ]
     ed_get_phisc_n2_wrap.restype = None
+
+    ed_get_argsc_n2_wrap = self.library.ed_get_argsc_n2
+    ed_get_argsc_n2_wrap.argtypes = [
+        np.ctypeslib.ndpointer(
+            dtype=float, ndim=2, flags="F_CONTIGUOUS"
+        )  # self
+    ]
+    ed_get_argsc_n2_wrap.restype = None
+
     if self.has_ineq:
         ed_get_phisc_n3_wrap = self.library.ed_get_phisc_n3
         ed_get_phisc_n3_wrap.argtypes = [
@@ -276,51 +290,88 @@ def get_phi(self, ilat=None, iorb=None, jorb=None):
         ]
         ed_get_phisc_n3_wrap.restype = None
 
+        ed_get_argsc_n3_wrap = self.library.ed_get_argsc_n3
+        ed_get_argsc_n3_wrap.argtypes = [
+            np.ctypeslib.ndpointer(
+                dtype=float, ndim=2, flags="F_CONTIGUOUS"
+            )  # self
+        ]
+        ed_get_argsc_n3_wrap.restype = None
+
     if self.Nineq == 0:
-        phivec = np.zeros((aux_norb, aux_norb), dtype=float, order="F")
-        ed_get_phisc_n2_wrap(phivec)
-        phivec = np.ascontiguousarray(phivec)
+        modphivec = np.zeros((aux_norb, aux_norb), dtype=float, order="F")
+        argphivec = np.zeros((aux_norb, aux_norb), dtype=float, order="F")
+        ed_get_phisc_n2_wrap(modphivec)
+        ed_get_argsc_n2_wrap(argphivec)
+        modphivec = np.ascontiguousarray(modphivec)
+        argphivec = np.ascontiguousarray(argphivec)
 
         if ilat is not None:
             raise ValueError("ilat cannot be none for single-impurity DMFT")
         elif iorb is not None and jorb is not None:
-            return phivec[iorb, jorb]
+            modout = modphivec[iorb, jorb]
+            argout = argphivec[iorb, jorb]
         elif iorb is not None and jorb is None:
-            return phivec[iorb, :]
+            modout = modphivec[iorb, :]
+            argout = argphivec[iorb, :]
         elif jorb is not None and iorb is None:
-            return phivec[:, jorb]
+            modout = modphivec[:, jorb]
+            argout = argphivec[:, jorb]
         else:
-            return phivec
+            modout = modphivec
+            argout = argphivec
     else:
         if self.has_ineq:
-            phivec = np.zeros(
+            modphivec = np.zeros(
                 [self.Nineq, aux_norb, aux_norb], dtype=float, order="F"
             )
-            ed_get_docc_n3_wrap(phivec, self.Nineq)
-            phivec = np.ascontiguousarray(phivec)
+            argphivec = np.zeros(
+                [self.Nineq, aux_norb, aux_norb], dtype=float, order="F"
+            )
+            ed_get_phisc_n3_wrap(modphivec, self.Nineq)
+            ed_get_argsc_n3_wrap(argphivec, self.Nineq)
+
+            modphivec = np.ascontiguousarray(modphivec)
+            argphivec = np.ascontiguousarray(argphivec)
 
             if ilat is not None:
                 if iorb is not None and jorb is not None:
-                    return phivec[ilat, iorb, jorb]
+                    modout = modphivec[ilat, iorb, jorb]
+                    argout = argphivec[ilat, iorb, jorb]
                 if iorb is not None and jorb is None:
-                    return phivec[ilat, iorb, :]
+                    modout = modphivec[ilat, iorb, :]
+                    argout = argphivec[ilat, iorb, :]
                 if jorb is not None and iorb is None:
-                    return phivec[ilat, :, jorb]
+                    modout = modphivec[ilat, :, jorb]
+                    argout = argphivec[ilat, :, jorb]
                 else:
-                    return phivec[ilat, :, :]
+                    modout = modphivec[ilat, :, :]
+                    argout = argphivec[ilat, :, :]
             else:
                 if iorb is not None and jorb is not None:
-                    return phivec[:, iorb, jorb]
+                    modout = modphivec[:, iorb, jorb]
+                    argout = argphivec[:, iorb, jorb]
                 if iorb is not None and jorb is None:
-                    return phivec[:, iorb, :]
+                    modout = modphivec[:, iorb, :]
+                    argout = argphivec[:, iorb, :]
                 if jorb is not None and iorb is None:
-                    return phivec[:, :, jorb]
+                    modout = modphivec[:, :, jorb]
+                    argout = argphivec[:, :, jorb]
                 else:
-                    return phivec
+                    modout = modphivec
+                    argout = argphivec
         else:
             raise RuntimeError(
                 "Can't use r-DMFT routines without installing EDIpack2ineq"
             )
+    if component is None:
+        return modout, argout
+    elif component == "mod":
+        return modout
+    elif component == "arg":
+        return argout
+    else:
+        raise ValueError("component can only be None, mod or arg.")
 
 
 
