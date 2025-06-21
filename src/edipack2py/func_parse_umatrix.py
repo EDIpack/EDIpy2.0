@@ -28,16 +28,16 @@ def add_twobody_operator(self, oi, si, oj, sj, ok, sk, ol, sl, Uijkl):
     (see :ref:`EDIpack documentation <edipack:parse_umatrix>`).
 
     :type oi: int
-    :param oi: orbital index of :math:`c^{\dagger}_{i}`
+    :param oi: orbital index of :math:`c^{\\dagger}_{i}`
 
     :type si: str
-    :param si: spin index of :math:`c^{\dagger}_{i}`
+    :param si: spin index of :math:`c^{\\dagger}_{i}`
 
     :type oj: int
-    :param oj: orbital index of :math:`c^{\dagger}_{j}`
+    :param oj: orbital index of :math:`c^{\\dagger}_{j}`
 
     :type sj: str
-    :param sj: spin index of :math:`c^{\dagger}_{j}`
+    :param sj: spin index of :math:`c^{\\dagger}_{j}`
 
     :type ok: int
     :param ok: orbital index of :math:`c_{k}`

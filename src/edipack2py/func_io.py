@@ -237,7 +237,7 @@ def get_docc(self, ilat=None, iorb=None):
 # superconductive phi
 def get_phi(self, ilat=None, iorb=None, jorb=None, component=None):
     """
-    This function returns the modulus :math:`|\\phi|` of the superconductive order \
+    This function returns the modulus and/or argument of the superconductive order \
     parameter :math:`\\phi = \\langle c_{\\uparrow} c_{\\downarrow} \\rangle`
   
    :type ilat: int
@@ -254,7 +254,7 @@ def get_phi(self, ilat=None, iorb=None, jorb=None, component=None):
     :param component: if :code:`mod` returns the modulus of :math:`phi`, if :code:`arg` \
       returns the argument. By default returns both.
    
-   :return: :math:`|\\phi|`, :math:`\mathrm{arg}(\phi)`. \
+   :return: :math:`|\\phi|`, :math:`\\mathrm{arg}(\\phi)`. \
     The full tensors have dimensions [ :code:`Nlat`, \
    :data:`Norb`, :data:`Norb`]. Depending on which keyword arguments are \
     (or not) provided, this is sliced on the corresponding axis.
@@ -373,7 +373,7 @@ def get_phi(self, ilat=None, iorb=None, jorb=None, component=None):
     else:
         raise ValueError("component can only be None, mod or arg.")
 
-       
+
 # energy
 def get_eimp(self, ilat=None, ikind=None):
     """
