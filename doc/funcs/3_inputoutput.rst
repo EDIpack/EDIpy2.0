@@ -13,8 +13,6 @@ These functions pass to the userspace the observables and response functions cal
 
 .. autofunction:: edipack2py.global_env.get_phi
 
-.. autofunction:: edipack2py.global_env.get_arg		  
-
 .. autofunction:: edipack2py.global_env.get_gimp
 
 .. autofunction:: edipack2py.global_env.get_sigma
