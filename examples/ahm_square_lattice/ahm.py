@@ -84,8 +84,17 @@ while (not converged and iloop<ed.Nloop ):
 
     #Solve the EFFECTIVE IMPURITY PROBLEM (first w/ a guess for the bath)
     ed.solve(bath)
-    print(ed.get_phi())
-    
+    modphi,argphi = ed.get_phi()
+    print("|phi|=")
+    print(modphi)
+    print("")
+    print(" arg =")
+    print(argphi)
+    print("")
+    print(" phi =")
+    print(modphi*np.exp(1j*argphi))
+    print("")
+        
     Smats = np.array([ed.get_sigma(axis="m",typ="n"),ed.get_sigma(axis="m",typ="a")])
     Sreal = np.array([ed.build_sigma(wr+1j*ed.eps,typ="n"),ed.build_sigma(wr+1j*ed.eps,typ="a")])
     
