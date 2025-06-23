@@ -250,9 +250,9 @@ def get_phi(self, ilat=None, iorb=None, jorb=None, component=None):
    :type jorb: int
    :param jorb: the second orbital index
    
-    :type component: str
-    :param component: if :code:`mod` returns the modulus of :math:`phi`, if :code:`arg` \
-      returns the argument. By default returns both.
+   :type component: str
+   :param component: if :code:`mod` returns the modulus of :math:`\\phi`, \
+    if :code:`arg` returns the argument. By default returns both.
    
    :return: :math:`|\\phi|`, :math:`\\mathrm{arg}(\\phi)`. \
     The full tensors have dimensions [ :code:`Nlat`, \
